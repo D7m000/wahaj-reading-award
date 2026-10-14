@@ -1,0 +1,7138 @@
+/* ============================================================
+   Wahaj — Advanced Navigation System
+   Mega menu · Search · Back-to-top · Scroll spy · Mobile drawer
+   ============================================================ */
+
+/* ---------- nav links shared ---------- */
+.nav-item {
+  position: relative;
+}
+.nav-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-family: var(--wj-font);
+  color: #4d444e;
+  padding: 8px 4px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color var(--wj-d1) var(--wj-e-io);
+  background: none;
+  border: none;
+}
+.nav-trigger:hover,
+.nav-trigger.active {
+  color: #994c9c;
+}
+.nav-trigger .chev {
+  font-size: 16px;
+  transition: transform var(--wj-d2) var(--wj-e-out);
+}
+.nav-item.open .nav-trigger .chev {
+  transform: rotate(180deg);
+}
+.nav-trigger.active::after,
+.nav-active::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  left: 0;
+  bottom: -2px;
+  height: 2px;
+  background: #994c9c;
+  border-radius: 2px;
+}
+
+/* ---------- mega menu panel ---------- */
+.mega {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 50%;
+  transform: translateX(50%) translateY(-6px);
+  background: #ffffff;
+  border: 1px solid #d0c2cf;
+  border-radius: 12px;
+  box-shadow:
+    0 20px 60px rgba(130, 76, 150, 0.12),
+    0 4px 12px rgba(0, 0, 0, 0.04);
+  padding: 24px;
+  min-width: 480px;
+  max-width: 720px;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity var(--wj-d2) var(--wj-e-io),
+    transform var(--wj-d2) var(--wj-e-out),
+    visibility var(--wj-d2) ease;
+  z-index: 60;
+}
+.nav-item.open .mega,
+.nav-item:hover .mega,
+.nav-item:focus-within .mega {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(50%) translateY(0);
+}
+.mega::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  right: 50%;
+  transform: translateX(50%);
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 10px solid #ffffff;
+  filter: drop-shadow(0 -1px 0 #d0c2cf);
+}
+
+/* mega menu grid */
+.mega-grid {
+  display: grid;
+  gap: 6px;
+}
+.mega-grid.cols-2 {
+  grid-template-columns: 1fr 1fr;
+}
+.mega-grid.cols-3 {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.mega-col-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #994c9c;
+  letter-spacing: 0.04em;
+  padding: 0 12px 8px;
+  border-bottom: 1px solid #efeeeb;
+  margin-bottom: 6px;
+}
+
+.mega-link {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  color: #1a1c1a;
+  transition:
+    background var(--wj-d1) var(--wj-e-io),
+    color var(--wj-d1) ease;
+  text-decoration: none;
+}
+.mega-link:hover {
+  background: #f4f3f1;
+  color: #994c9c;
+}
+.mega-link .ic {
+  flex: 0 0 36px;
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  background: rgba(130, 76, 150, 0.08);
+  color: #994c9c;
+  border-radius: 8px;
+  font-size: 20px;
+}
+.mega-link:hover .ic {
+  background: rgba(130, 76, 150, 0.16);
+}
+.mega-link .txt {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.mega-link .name,
+.mega-link .wj-name {
+  font-size: 14px;
+  font-weight: 600;
+}
+.mega-link .desc,
+.mega-link .wj-desc {
+  font-size: 12px;
+  color: #6b6270;
+  margin-top: 2px;
+}
+
+/* CTA bottom strip in mega */
+.mega-cta {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #efeeeb;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.mega-cta .label {
+  font-size: 13px;
+  color: #4d444e;
+}
+.mega-cta a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #994c9c;
+}
+.mega-cta a:hover {
+  gap: 10px;
+}
+
+/* ---------- search modal ---------- */
+/* لا نُحدّد display هنا: nav.css يُحمّل بعد tw.css وبنفس الأولوية، فكان
+   display:inline-flex يتغلّب على فئة hidden ويُظهر زر البحث على الجوال
+   بجانب أيقونة البحث المخصّصة له — زرّا بحث متجاوران. الإظهار متروك
+   لفئات ‎hidden md:inline-flex‎ الموجودة على العنصر في كل الصفحات. */
+.search-fab {
+  align-items: center;
+  gap: 6px;
+  background: #efeeeb;
+  border: 1px solid #d0c2cf;
+  border-radius: 999px;
+  padding: 6px 12px 6px 8px;
+  font-size: 13px;
+  color: #6b6270;
+  transition:
+    background var(--wj-d1) var(--wj-e-io),
+    border-color var(--wj-d1) ease;
+}
+.search-fab:hover {
+  background: #e3e2e0;
+  border-color: #994c9c;
+  color: #994c9c;
+}
+.search-fab .kbd {
+  display: inline-flex;
+  align-items: center;
+  font-family: monospace;
+  font-size: 11px;
+  background: #ffffff;
+  border: 1px solid #d0c2cf;
+  padding: 1px 6px;
+  border-radius: 4px;
+  color: #4d444e;
+}
+
+.search-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(26, 28, 26, 0.55);
+  backdrop-filter: blur(6px);
+  z-index: 100;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity var(--wj-d2) var(--wj-e-io),
+    visibility var(--wj-d2) ease;
+}
+.search-backdrop.open {
+  opacity: 1;
+  visibility: visible;
+}
+.search-modal {
+  position: fixed;
+  top: 10vh;
+  left: 50%;
+  transform: translateX(-50%) scale(0.96);
+  width: min(92vw, 600px);
+  background: #faf9f6;
+  border-radius: 16px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.3);
+  border: 1px solid #d0c2cf;
+  z-index: 101;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity var(--wj-d2) var(--wj-e-io),
+    transform var(--wj-d2) var(--wj-e-out),
+    visibility var(--wj-d2) ease;
+  overflow: hidden;
+}
+.search-backdrop.open + .search-modal,
+.search-modal.open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) scale(1);
+}
+.search-modal__input-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 20px;
+  border-bottom: 1px solid #d0c2cf;
+}
+.search-modal__input-row .material-symbols-outlined {
+  color: #994c9c;
+  font-size: 24px;
+}
+.search-modal__input {
+  flex: 1;
+  background: transparent;
+  border: 0;
+  outline: 0;
+  font-family: var(--wj-font);
+  font-size: 18px;
+  color: #1a1c1a;
+}
+.search-modal__input::placeholder {
+  color: #6b6270;
+}
+.search-modal__esc {
+  font-family: monospace;
+  font-size: 11px;
+  background: #efeeeb;
+  border: 1px solid #d0c2cf;
+  padding: 2px 8px;
+  border-radius: 4px;
+  color: #4d444e;
+}
+.search-modal__results {
+  max-height: 50vh;
+  overflow-y: auto;
+  padding: 8px 12px 16px;
+}
+.search-result-group {
+  padding: 12px 8px 4px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #994c9c;
+  letter-spacing: 0.08em;
+}
+.search-result {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background var(--wj-d1) var(--wj-e-io);
+  text-decoration: none;
+  color: #1a1c1a;
+}
+.search-result:hover,
+.search-result.active {
+  background: #f4f3f1;
+  color: #994c9c;
+}
+.search-result .ic {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  background: rgba(130, 76, 150, 0.08);
+  color: #994c9c;
+  border-radius: 6px;
+  font-size: 18px;
+}
+.search-result .lbl {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 500;
+}
+.search-result .sub {
+  font-size: 12px;
+  color: #6b6270;
+}
+.search-empty {
+  padding: 32px 16px;
+  text-align: center;
+  color: #6b6270;
+  font-size: 14px;
+}
+
+/* ---------- back to top ---------- */
+.back-top {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 55;
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  background: #994c9c;
+  color: #ffffff;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 10px 30px rgba(130, 76, 150, 0.3);
+  border: 0;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px);
+  transition:
+    opacity var(--wj-d2) var(--wj-e-io),
+    transform var(--wj-d2) var(--wj-e-out),
+    background var(--wj-d1) ease,
+    visibility var(--wj-d2) ease;
+}
+.back-top.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+.back-top:hover {
+  background: #aa5fae;
+  transform: translateY(-3px);
+}
+
+/* ---------- breadcrumbs ---------- */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 16px 0;
+  font-size: 13px;
+  color: #6b6270;
+}
+.breadcrumb a {
+  color: #6b6270;
+  transition: color var(--wj-d1) var(--wj-e-io);
+}
+.breadcrumb a:hover {
+  color: #994c9c;
+}
+.breadcrumb .sep {
+  color: #d0c2cf;
+  font-size: 16px;
+  transform: scaleX(-1); /* RTL chevron */
+}
+.breadcrumb .current {
+  color: #1a1c1a;
+  font-weight: 500;
+}
+
+/* ---------- mobile drawer accordion ---------- */
+.m-acc {
+  border-bottom: 1px solid #efeeeb;
+}
+.m-acc__btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 12px;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  font-family: var(--wj-font);
+  font-size: 15px;
+  font-weight: 500;
+  color: #1a1c1a;
+}
+.m-acc__btn .chev {
+  transition: transform var(--wj-d2) var(--wj-e-out);
+  color: #994c9c;
+}
+.m-acc.open .m-acc__btn .chev {
+  transform: rotate(180deg);
+}
+.m-acc__panel {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height var(--wj-d3) var(--wj-e-out);
+}
+.m-acc.open .m-acc__panel {
+  max-height: 800px;
+}
+.m-acc__panel a {
+  display: block;
+  padding: 10px 24px;
+  font-size: 14px;
+  color: #4d444e;
+  border-right: 2px solid transparent;
+  transition:
+    background var(--wj-d1) var(--wj-e-io),
+    border-color var(--wj-d1) ease,
+    color var(--wj-d1) ease;
+}
+.m-acc__panel a:hover {
+  background: #f4f3f1;
+  color: #994c9c;
+  border-right-color: #994c9c;
+}
+
+/* scroll-spy active in TOC */
+.toc-link.active {
+  color: #994c9c;
+  font-weight: 600;
+  background: rgba(130, 76, 150, 0.06);
+  border-right: 2px solid #994c9c;
+}
+
+/* ============================================================
+   Journey-style sections — paths, calendar, products
+   ============================================================ */
+
+/* ---------- Track journey (use uniquely-prefixed classes to avoid Tailwind conflicts) ---------- */
+.wj-journey {
+  position: relative !important;
+  padding: 32px 0 !important;
+}
+.wj-journey-track {
+  position: relative !important;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: stretch !important;
+  justify-content: space-between !important;
+  gap: 0 !important;
+}
+/* Connecting line behind nodes */
+.wj-journey-track::before {
+  content: "" !important;
+  position: absolute !important;
+  top: 36px !important;
+  right: 5% !important;
+  left: 5% !important;
+  height: 3px !important;
+  background: linear-gradient(90deg, #994c9c, #aa5fae 50%, #ffcc05) !important;
+  border-radius: 2px !important;
+  z-index: 0 !important;
+  opacity: 0.7 !important;
+}
+.wj-journey-track.tamkeen::before {
+  background: linear-gradient(90deg, #ffcc05, #eebe06 50%, #735c00) !important;
+}
+.wj-journey-node {
+  position: relative !important;
+  flex: 1 1 0 !important;
+  min-width: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  text-align: center !important;
+  padding: 0 6px !important;
+  z-index: 1 !important;
+  cursor: pointer !important;
+  text-decoration: none !important;
+  color: inherit !important;
+}
+.wj-journey-node .wj-dot {
+  width: 72px !important;
+  height: 72px !important;
+  border-radius: 9999px !important;
+  background: #ffffff !important;
+  border: 3px solid #d0c2cf !important;
+  display: grid !important;
+  place-items: center !important;
+  margin-bottom: 14px !important;
+  color: #994c9c !important;
+  position: relative !important;
+  transition:
+    transform var(--wj-d2) var(--wj-e-out),
+    border-color var(--wj-d2) var(--wj-e-io),
+    box-shadow var(--wj-d2) ease,
+    background var(--wj-d2) ease !important;
+}
+.wj-journey-node:hover .wj-dot {
+  transform: translateY(-6px) scale(1.08) !important;
+  border-color: #994c9c !important;
+  box-shadow: 0 16px 40px rgba(130, 76, 150, 0.22) !important;
+  background: linear-gradient(135deg, #ffffff, #faf6ff) !important;
+}
+.wj-journey-track.tamkeen .wj-journey-node .wj-dot {
+  color: #735c00 !important;
+}
+.wj-journey-track.tamkeen .wj-journey-node:hover .wj-dot {
+  border-color: #735c00 !important;
+  box-shadow: 0 16px 40px rgba(115, 92, 0, 0.2) !important;
+}
+.wj-journey-node .wj-step {
+  position: absolute !important;
+  top: -8px !important;
+  right: -8px !important;
+  background: #994c9c !important;
+  color: #ffffff !important;
+  width: 24px !important;
+  height: 24px !important;
+  border-radius: 9999px !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  display: grid !important;
+  place-items: center !important;
+  font-family: var(--wj-font) !important;
+  z-index: 2 !important;
+  box-shadow: 0 4px 12px rgba(130, 76, 150, 0.3) !important;
+}
+.wj-journey-track.tamkeen .wj-journey-node .wj-step {
+  background: #735c00 !important;
+}
+.wj-journey-node .wj-name {
+  font-family: var(--wj-font) !important;
+  font-weight: 700 !important;
+  font-size: 15px !important;
+  color: #1a1c1a !important;
+  margin-bottom: 3px !important;
+}
+.wj-journey-node .wj-desc {
+  font-size: 11px !important;
+  color: #4d444e !important;
+  line-height: 1.5 !important;
+  max-width: 130px !important;
+}
+.wj-journey-node .wj-latin {
+  font-size: 9px !important;
+  color: #7f747f !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+  margin-top: 4px !important;
+}
+
+/* MOBILE: switch to vertical journey */
+@media (max-width: 767px) {
+  .wj-journey-track {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 18px !important;
+  }
+  .wj-journey-track::before {
+    top: 0 !important;
+    bottom: 0 !important;
+    right: 32px !important;
+    left: auto !important;
+    width: 3px !important;
+    height: auto !important;
+    background: linear-gradient(180deg, #994c9c, #aa5fae 50%, #ffcc05) !important;
+  }
+  .wj-journey-track.tamkeen::before {
+    background: linear-gradient(180deg, #ffcc05, #eebe06 50%, #735c00) !important;
+  }
+  .wj-journey-node {
+    flex-direction: row !important;
+    align-items: center !important;
+    text-align: right !important;
+    padding: 0 !important;
+    gap: 14px !important;
+  }
+  .wj-journey-node .wj-dot {
+    width: 58px !important;
+    height: 58px !important;
+    margin-bottom: 0 !important;
+    flex-shrink: 0 !important;
+  }
+  .wj-journey-node .wj-step {
+    top: -4px !important;
+    right: -4px !important;
+    width: 20px !important;
+    height: 20px !important;
+    font-size: 10px !important;
+  }
+  .wj-journey-node .wj-name {
+    font-size: 14px !important;
+    margin-bottom: 1px !important;
+  }
+  .wj-journey-node .wj-desc {
+    font-size: 11px !important;
+    max-width: none !important;
+  }
+  .wj-journey-node .wj-latin {
+    font-size: 9px !important;
+  }
+}
+
+/* Track header (Takween / Tamkeen) — bold pill */
+.track-header {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 22px 10px 18px;
+  background: #ffffff;
+  border: 1px solid #d0c2cf;
+  border-radius: 9999px;
+  box-shadow: 0 4px 12px rgba(130, 76, 150, 0.06);
+}
+.track-header.takween {
+  background: linear-gradient(135deg, #ffffff 60%, #f6dcf7);
+}
+.track-header.tamkeen {
+  background: linear-gradient(135deg, #ffffff 60%, #ffe088);
+}
+.track-header.tertiary {
+  background: linear-gradient(135deg, #ffffff 60%, #c8ecfb);
+}
+.track-header .badge {
+  width: 40px;
+  height: 40px;
+  border-radius: 9999px;
+  /* هوية الأيقونات الخمرية: خلفية فاتحة + أيقونة خمرية (كانت دائرة بنفسجية بأيقونة بيضاء) */
+  background: #fbf6f9;
+  color: #b03269;
+  border: 1px solid #efe1ea;
+  display: grid;
+  place-items: center;
+  font-size: 14px;
+  font-weight: 700;
+}
+.track-header.tamkeen .badge {
+  background: #fbf6f9;
+}
+.track-header.tertiary .badge {
+  background: #fbf6f9;
+}
+.track-header .info {
+  display: flex;
+  flex-direction: column;
+}
+.track-header .info .label {
+  font-size: 11px;
+  color: #4d444e;
+  font-weight: 500;
+}
+.track-header .info .title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1a1c1a;
+}
+
+/* ---------- Calendar / agenda timeline (vertical journey) ---------- */
+.agenda {
+  position: relative;
+  padding-right: 32px;
+}
+.agenda::before {
+  content: "";
+  position: absolute;
+  top: 12px;
+  bottom: 12px;
+  right: 14px;
+  width: 3px;
+  background: linear-gradient(180deg, #994c9c 0%, #d0c2cf 100%);
+  border-radius: 2px;
+}
+.agenda-item {
+  position: relative;
+  padding: 18px 20px;
+  background: #ffffff;
+  border: 1px solid #d0c2cf;
+  border-radius: 16px;
+  margin-bottom: 18px;
+  transition:
+    transform var(--wj-d2) var(--wj-e-out),
+    box-shadow var(--wj-d2) var(--wj-e-io),
+    border-color var(--wj-d2) ease;
+}
+.agenda-item:hover {
+  transform: translateX(-6px);
+  box-shadow: 0 12px 32px rgba(130, 76, 150, 0.1);
+  border-color: #994c9c;
+}
+.agenda-item::before {
+  /* the connector dot */
+  content: "";
+  position: absolute;
+  top: 22px;
+  right: -32px;
+  width: 20px;
+  height: 20px;
+  border-radius: 9999px;
+  background: #ffffff;
+  border: 3px solid #994c9c;
+  box-shadow: 0 0 0 4px #faf9f6;
+  transition:
+    background var(--wj-d2) var(--wj-e-io),
+    transform var(--wj-d2) var(--wj-e-out);
+}
+.agenda-item:hover::before {
+  background: #ffcc05;
+  transform: scale(1.2);
+}
+.agenda-item .month {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: #994c9c;
+  margin-bottom: 6px;
+}
+.agenda-item .date {
+  font-size: 28px;
+  font-weight: 800;
+  color: #994c9c;
+  line-height: 1;
+  margin-bottom: 8px;
+  font-feature-settings: "tnum";
+  font-variant-numeric: tabular-nums;
+}
+.agenda-item .title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a1c1a;
+  margin-bottom: 6px;
+}
+.agenda-item .meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  font-size: 12px;
+  color: #4d444e;
+}
+.agenda-item .meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.agenda-item .cta {
+  margin-top: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #994c9c;
+  font-size: 13px;
+  font-weight: 600;
+  transition: gap var(--wj-d2) var(--wj-e-io);
+}
+.agenda-item .cta:hover {
+  gap: 10px;
+}
+
+/* ---------- Premium product cards ---------- */
+.prod-card {
+  position: relative;
+  background: #ffffff;
+  border: 1px solid #d0c2cf;
+  border-radius: 22px;
+  padding: 24px 18px;
+  text-align: center;
+  transition:
+    transform var(--wj-d3) var(--wj-e-out),
+    box-shadow var(--wj-d3) var(--wj-e-io),
+    border-color var(--wj-d2) ease;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.prod-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #994c9c, #aa5fae, #ffcc05);
+  opacity: 0;
+  transition: opacity var(--wj-d2) var(--wj-e-io);
+}
+.prod-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px rgba(130, 76, 150, 0.15);
+  border-color: #994c9c;
+}
+.prod-card:hover::before {
+  opacity: 1;
+}
+
+.prod-card .icon-bubble {
+  width: 76px;
+  height: 76px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #f6dcf7, #ffffff);
+  border: 1px solid rgba(130, 76, 150, 0.18);
+  display: grid;
+  place-items: center;
+  margin-bottom: 16px;
+  color: #994c9c;
+  transition:
+    transform var(--wj-d2) var(--wj-e-out),
+    background var(--wj-d2) var(--wj-e-io);
+}
+.prod-card:hover .icon-bubble {
+  transform: rotate(-8deg) scale(1.08);
+  background: linear-gradient(135deg, #f6dcf7, #ffcc05);
+}
+
+.prod-card .title {
+  font-family: var(--wj-font);
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a1c1a;
+  margin-bottom: 6px;
+}
+.prod-card .subtitle {
+  font-size: 12px;
+  color: #4d444e;
+  margin-bottom: 14px;
+  line-height: 1.6;
+  flex: 1;
+}
+.prod-card .pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: #f4f3f1;
+  border: 1px solid #d0c2cf;
+  border-radius: 9999px;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #994c9c;
+  transition:
+    background var(--wj-d2) var(--wj-e-io),
+    color var(--wj-d2) ease;
+}
+.prod-card:hover .pill {
+  background: #994c9c;
+  color: #ffffff;
+  border-color: #994c9c;
+}
+
+/* Featured product (one large card) */
+.prod-card.featured {
+  background: linear-gradient(135deg, #994c9c, #aa5fae);
+  color: #ffffff;
+  border-color: transparent;
+}
+.prod-card.featured .title,
+.prod-card.featured .subtitle {
+  color: #ffffff;
+}
+.prod-card.featured .icon-bubble {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+}
+.prod-card.featured .pill {
+  background: #ffcc05;
+  color: #1a1c1a;
+  border-color: transparent;
+}
+.prod-card.featured:hover .pill {
+  background: #ffffff;
+  color: #994c9c;
+}
+.prod-card.featured::before {
+  opacity: 1;
+}
+
+@media (max-width: 767px) {
+  .prod-card {
+    padding: 14px 10px;
+    border-radius: 16px;
+  }
+  .prod-card .icon-bubble {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 10px;
+    border-radius: 12px;
+  }
+  .prod-card .title {
+    font-size: 13px;
+    margin-bottom: 4px;
+  }
+  .prod-card .subtitle {
+    font-size: 10px;
+    margin-bottom: 8px;
+  }
+  .prod-card .pill {
+    font-size: 9px;
+    padding: 2px 7px;
+  }
+}
+
+/* ---------- Stunning initiative icons ---------- */
+.wj-init-svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 4px 14px rgba(104, 52, 124, 0.25));
+  transition:
+    transform var(--wj-d3) var(--wj-e-out),
+    filter var(--wj-d2) var(--wj-e-io);
+}
+.init-card:hover .wj-init-svg,
+.wj-journey-node:hover .wj-init-svg {
+  transform: scale(1.08) rotate(-3deg);
+  filter: drop-shadow(0 10px 24px rgba(104, 52, 124, 0.35));
+}
+.init-card .wj-icon-wrap,
+.wj-journey-node .wj-icon-wrap {
+  display: grid;
+  place-items: center;
+  padding: 4px;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* ============================================================
+   COMPREHENSIVE MOBILE FIXES (≤767px)
+   Targets all 9 issues from the mobile audit
+   ============================================================ */
+@media (max-width: 767px) {
+  /* Prevent horizontal overflow site-wide */
+  html,
+  body {
+    overflow-x: hidden !important;
+    max-width: 100vw !important;
+  }
+
+  /* === 1. Journey nodes — proper vertical layout with content beside dot === */
+  .wj-journey-node {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    text-align: right !important;
+    width: 100% !important;
+    padding: 8px 14px !important;
+    background: #ffffff !important;
+    border: 1px solid #d0c2cf !important;
+    border-radius: 14px !important;
+    box-shadow: 0 2px 8px rgba(130, 76, 150, 0.06) !important;
+    gap: 14px !important;
+    margin-bottom: 0 !important;
+  }
+  .wj-journey-node > * {
+    display: block !important;
+  }
+  .wj-journey-node .wj-dot {
+    flex-shrink: 0 !important;
+    width: 56px !important;
+    height: 56px !important;
+    margin-bottom: 0 !important;
+  }
+  .wj-journey-node .wj-name {
+    font-size: 15px !important;
+    margin-bottom: 2px !important;
+    text-align: right !important;
+  }
+  .wj-journey-node .wj-desc {
+    font-size: 11px !important;
+    max-width: none !important;
+    text-align: right !important;
+  }
+  .wj-journey-node .wj-latin {
+    font-size: 9px !important;
+    text-align: right !important;
+  }
+  .wj-journey-track::before {
+    display: none !important;
+  }
+  .wj-journey-track {
+    gap: 10px !important;
+    padding-right: 0 !important;
+  }
+
+  /* === 2. Packages — single column on mobile === */
+  #packages .grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+    max-width: 100% !important;
+  }
+  #packages .grid > div {
+    transform: none !important;
+    margin: 0 !important;
+    padding: 24px 18px !important;
+  }
+  #packages .text-4xl {
+    font-size: 26px !important;
+  }
+  /* Prevent "ريال / شهرياً" overflow */
+  #packages .flex.items-baseline.gap-2 {
+    flex-wrap: wrap !important;
+  }
+
+  /* === 3. Target audiences — 2 cols not 4 === */
+  section:has(> .max-w-container-max > .text-center h2:-webkit-any(:contains("الفئات"))) .grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+  /* Fallback: target by class chain */
+  .grid.grid-cols-4.sm\:grid-cols-4.lg\:grid-cols-4 {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px !important;
+  }
+  .grid.grid-cols-4.sm\:grid-cols-4.lg\:grid-cols-4 > div {
+    padding: 16px 12px !important;
+  }
+  .grid.grid-cols-4.sm\:grid-cols-4.lg\:grid-cols-4 h3 {
+    font-size: 14px !important;
+  }
+  .grid.grid-cols-4.sm\:grid-cols-4.lg\:grid-cols-4 p {
+    font-size: 11px !important;
+  }
+  .grid.grid-cols-4.sm\:grid-cols-4.lg\:grid-cols-4 .w-9 {
+    width: 40px !important;
+    height: 40px !important;
+  }
+
+  /* === 4. About page — Vision/Mission/Goals — single column === */
+  #about .grid.grid-cols-3 {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+  /* Same for any 3-col grids inside about/intro */
+  .grid.grid-cols-3.gap-2,
+  .grid.grid-cols-3.md\:grid-cols-3 {
+    /* keep 3 cols only where intentional */
+  }
+
+  /* === 5. Calendar — full-width, content readable === */
+  section:has(h2:-webkit-any(:contains("روزنامة"))) .space-y-4 > div {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    text-align: right !important;
+    padding: 16px !important;
+  }
+  /* Calendar items: target by their structure */
+  .bg-surface-container-lowest.rounded-xl.flex.flex-col.sm\:flex-row {
+    align-items: stretch !important;
+  }
+  .bg-surface-container-lowest.rounded-xl .min-w-\[80px\] {
+    margin-bottom: 12px !important;
+  }
+
+  /* === 6. Media center tabs — 2×2 instead of 4 === */
+  #media .grid.grid-cols-2 {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 12px !important;
+  }
+  #media .grid.grid-cols-2.md\:grid-cols-4 > a {
+    padding: 14px 8px !important;
+  }
+  #media .h-32,
+  #media .h-40 {
+    height: 90px !important;
+  }
+
+  /* === 7. Products — 2 cols for cleaner 2×2 layout === */
+  #products .grid.grid-cols-3 {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 12px !important;
+  }
+
+  /* === 8. Touch targets — min 44px height === */
+  a[href]:not(.brand-icon):not(.material-symbols-outlined),
+  button:not(.brand-icon) {
+    min-height: 36px;
+  }
+  footer a {
+    padding: 6px 0 !important;
+    display: inline-block !important;
+  }
+  /* CTA links — taller touch area */
+  .agenda-item .cta,
+  a.inline-flex.items-center.gap-2.text-primary {
+    min-height: 44px !important;
+    padding-block: 8px !important;
+  }
+
+  /* === 9. Container padding — ensure no edge clipping === */
+  .max-w-container-max {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+  .px-margin-mobile {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  /* Hide WhatsApp bubble label on tiny screens to avoid overlap */
+  /* Search modal Esc button — smaller on mobile */
+  .search-modal__esc {
+    font-size: 10px !important;
+    padding: 2px 6px !important;
+  }
+}
+
+/* === Slight tablet tweak === */
+@media (min-width: 640px) and (max-width: 1023px) {
+  #packages .grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+  #packages .grid > div:nth-child(3) {
+    grid-column: span 2 !important;
+    max-width: 50% !important;
+    margin: 0 auto !important;
+  }
+}
+
+/* ============================================================
+   Organization Chart (about.html)
+   ============================================================ */
+.wj-org-chart {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  padding: 24px 0;
+  position: relative;
+  max-width: 980px;
+  margin: 0 auto;
+  width: 100%;
+  overflow-x: clip;
+}
+.wj-org-level {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.wj-org-node {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #994c9c 0%, #aa5fae 100%);
+  color: #ffffff;
+  padding: 14px 22px;
+  border-radius: 12px;
+  font-family: var(--wj-font);
+  font-weight: 600;
+  font-size: 15px;
+  text-align: center;
+  box-shadow: 0 6px 16px rgba(104, 52, 124, 0.2);
+  transition:
+    transform var(--wj-d2) var(--wj-e-out),
+    box-shadow var(--wj-d2) var(--wj-e-io);
+  min-width: 140px;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.wj-org-node:hover {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 12px 28px rgba(104, 52, 124, 0.3);
+}
+.wj-org-node .ic {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 7px;
+  color: #ffcc05;
+}
+.wj-org-node.secondary {
+  background: linear-gradient(135deg, #aa5fae 0%, #92418f 100%);
+  font-size: 13px;
+  padding: 10px 16px;
+  min-width: 110px;
+  font-weight: 500;
+}
+.wj-org-node.dept {
+  background: linear-gradient(135deg, #92418f 0%, #aa5fae 100%);
+  font-size: 12px;
+  padding: 12px 10px;
+  min-width: auto;
+  width: 100%;
+  flex-direction: column;
+  gap: 6px;
+  text-align: center;
+  line-height: 1.35;
+}
+.wj-org-node.dept .ic {
+  width: 32px;
+  height: 32px;
+  background: rgba(250, 205, 23, 0.15);
+  border-radius: 8px;
+}
+
+/* Dotted connector lines */
+.wj-org-line.vertical {
+  width: 2px;
+  height: 36px;
+  background-image: linear-gradient(
+    to bottom,
+    #34c2ee 0,
+    #34c2ee 4px,
+    transparent 4px,
+    transparent 8px
+  );
+  background-size: 2px 8px;
+  background-repeat: repeat-y;
+  margin: 0;
+}
+.wj-org-level-lateral {
+  position: relative;
+}
+.wj-org-lateral-line {
+  width: 28px;
+  height: 2px;
+  background-image: linear-gradient(
+    to right,
+    #34c2ee 0,
+    #34c2ee 4px,
+    transparent 4px,
+    transparent 8px
+  );
+  background-size: 8px 2px;
+  background-repeat: repeat-x;
+}
+
+/* Departments: grid with connector spider */
+.wj-org-level-departments {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 10px;
+  position: relative;
+  padding-top: 36px;
+  width: 100%;
+}
+.wj-org-level-departments::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 7%;
+  right: 7%;
+  height: 2px;
+  background-image: linear-gradient(
+    to right,
+    #34c2ee 0,
+    #34c2ee 4px,
+    transparent 4px,
+    transparent 8px
+  );
+  background-size: 8px 2px;
+  background-repeat: repeat-x;
+}
+.wj-org-level-departments .wj-org-node::before {
+  content: "";
+  position: absolute;
+  top: -36px;
+  left: 50%;
+  width: 2px;
+  height: 36px;
+  background-image: linear-gradient(
+    to bottom,
+    #34c2ee 0,
+    #34c2ee 4px,
+    transparent 4px,
+    transparent 8px
+  );
+  background-size: 2px 8px;
+  background-repeat: repeat-y;
+  transform: translateX(-50%);
+}
+.wj-org-level-departments .wj-org-node {
+  position: relative;
+}
+
+/* MOBILE: stack departments 2 per row, simplified connectors */
+@media (max-width: 1023px) {
+  .wj-org-level-departments {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .wj-org-node.dept {
+    font-size: 11px;
+    padding: 10px 6px;
+  }
+}
+@media (max-width: 767px) {
+  .wj-org-chart {
+    padding: 16px 0;
+  }
+  .wj-org-level {
+    gap: 10px;
+  }
+  .wj-org-node {
+    font-size: 13px;
+    padding: 10px 14px;
+    min-width: 110px;
+  }
+  .wj-org-node .ic {
+    width: 24px;
+    height: 24px;
+  }
+  .wj-org-node.secondary {
+    font-size: 11px;
+    padding: 8px 12px;
+    min-width: 90px;
+  }
+  .wj-org-level-lateral {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .wj-org-lateral-line {
+    width: 2px;
+    height: 12px;
+    background-image: linear-gradient(
+      to bottom,
+      #34c2ee 0,
+      #34c2ee 4px,
+      transparent 4px,
+      transparent 8px
+    );
+    background-size: 2px 8px;
+    background-repeat: repeat-y;
+  }
+  .wj-org-level-departments {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    padding-top: 24px;
+  }
+  .wj-org-node.dept {
+    font-size: 12.5px;
+    padding: 13px 8px;
+  }
+  .wj-org-level-departments .wj-org-node:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+    flex-direction: row;
+    gap: 8px;
+    padding: 11px 8px;
+  }
+  .wj-org-level-departments::before {
+    display: none;
+  }
+  .wj-org-level-departments .wj-org-node::before {
+    display: none;
+  }
+  .wj-org-node.dept {
+    font-size: 10px;
+    padding: 10px 6px;
+    line-height: 1.3;
+  }
+  .wj-org-node.dept .ic {
+    width: 26px;
+    height: 26px;
+  }
+  .wj-org-line.vertical {
+    height: 24px;
+  }
+}
+
+/* ============================================================
+   URGENT FIXES — round 2
+   ============================================================ */
+
+/* Fix anchor scroll offset (sticky header was hiding section titles) */
+section[id],
+div[id]:not(.absolute):not(.fixed) {
+  scroll-margin-top: 90px;
+}
+
+/* ===== Vision + Mission side-by-side, Goals full-width below ===== */
+@media (max-width: 767px) {
+  /* On about.html: 3 cols vision/mission/goals → 2 on top, goals spans 2 below */
+  .grid.grid-cols-3.gap-2.sm\:gap-4.lg\:gap-6.mb-24,
+  section.py-stack-lg.bg-surface > .max-w-container-max > .grid.grid-cols-3 {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px !important;
+  }
+  .grid.grid-cols-3.gap-2.sm\:gap-4.lg\:gap-6.mb-24 > :nth-child(3) {
+    grid-column: span 2 !important;
+  }
+  /* Ensure inner padding fits on smaller cards */
+  .grid.grid-cols-3.gap-2.sm\:gap-4.lg\:gap-6.mb-24 > div {
+    padding: 14px 12px !important;
+  }
+}
+
+/* ===== Restore journey beauty on mobile (the white boxes were too plain) ===== */
+@media (max-width: 767px) {
+  .wj-journey-track {
+    position: relative !important;
+    padding-right: 32px !important;
+    gap: 14px !important;
+  }
+  /* Bring back the connecting line on mobile */
+  .wj-journey-track::before {
+    content: "" !important;
+    display: block !important;
+    position: absolute !important;
+    top: 32px !important;
+    bottom: 32px !important;
+    right: 60px !important;
+    left: auto !important;
+    width: 2px !important;
+    height: auto !important;
+    background: linear-gradient(180deg, #994c9c, #aa5fae 50%, #ffcc05) !important;
+    border-radius: 2px !important;
+    opacity: 0.5 !important;
+    z-index: 0 !important;
+  }
+  .wj-journey-track.tamkeen::before {
+    background: linear-gradient(180deg, #ffcc05, #eebe06 50%, #735c00) !important;
+  }
+  .wj-journey-node {
+    background: linear-gradient(135deg, #ffffff 0%, #faf9f6 100%) !important;
+    border: 1px solid #d0c2cf !important;
+    border-radius: 16px !important;
+    box-shadow: 0 4px 14px rgba(130, 76, 150, 0.08) !important;
+    padding: 12px 14px !important;
+    z-index: 1 !important;
+    position: relative !important;
+  }
+  .wj-journey-node:hover {
+    border-color: #994c9c !important;
+    box-shadow: 0 8px 20px rgba(130, 76, 150, 0.15) !important;
+    transform: translateX(-4px) !important;
+  }
+  .wj-journey-node .wj-dot {
+    width: 56px !important;
+    height: 56px !important;
+    border: 3px solid #994c9c !important;
+    background: linear-gradient(135deg, #ffffff, #faf6ff) !important;
+    box-shadow: 0 4px 12px rgba(130, 76, 150, 0.15) !important;
+  }
+  .wj-journey-track.tamkeen .wj-journey-node .wj-dot {
+    border-color: #735c00 !important;
+  }
+  .wj-journey-node .wj-step {
+    top: -6px !important;
+    right: -6px !important;
+    width: 22px !important;
+    height: 22px !important;
+    font-size: 11px !important;
+    box-shadow: 0 3px 10px rgba(130, 76, 150, 0.3) !important;
+  }
+}
+
+/* ============================================================
+   ROUND 3 — visual polish + mobile fixes
+   ============================================================ */
+
+/* === 1. Vision/Mission/Goals: 2 on top, Goals full-width below === */
+.vmg-grid {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 14px !important;
+}
+.vmg-grid > :nth-child(3) {
+  grid-column: span 2 !important;
+}
+@media (min-width: 1024px) {
+  .vmg-grid {
+    grid-template-columns: 1fr 1fr 1fr !important;
+  }
+  .vmg-grid > :nth-child(3) {
+    grid-column: auto !important;
+  }
+}
+
+/* === 2. Paths section box-wrapped === */
+#paths > .max-w-container-max,
+section#paths .text-center.mb-stack-lg {
+  position: relative;
+}
+#paths {
+  padding-top: 32px !important;
+  padding-bottom: 32px !important;
+}
+#paths .text-center.mb-stack-lg {
+  background: linear-gradient(135deg, #ffffff 0%, #faf6ff 60%, #fef3c7 100%);
+  border: 1px solid rgba(130, 76, 150, 0.18);
+  border-radius: 28px;
+  padding: 36px 24px;
+  box-shadow: 0 12px 40px rgba(130, 76, 150, 0.08);
+  margin-bottom: 32px !important;
+  overflow: hidden;
+}
+#paths .text-center.mb-stack-lg::before {
+  content: "";
+  position: absolute;
+  top: -80px;
+  right: -80px;
+  width: 240px;
+  height: 240px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(250, 205, 23, 0.2) 0%, transparent 70%);
+  pointer-events: none;
+}
+#paths .text-center.mb-stack-lg::after {
+  content: "";
+  position: absolute;
+  bottom: -80px;
+  left: -80px;
+  width: 240px;
+  height: 240px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(130, 76, 150, 0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+#paths .text-center.mb-stack-lg > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* === 3. Products box-wrapped === */
+#products {
+  padding: 48px 16px !important;
+  background: linear-gradient(180deg, #f4f3f1 0%, #faf9f6 100%) !important;
+}
+#products > .max-w-container-max {
+  background: #ffffff;
+  border-radius: 28px;
+  padding: 36px 20px;
+  box-shadow: 0 16px 60px rgba(130, 76, 150, 0.1);
+  border: 1px solid rgba(208, 194, 207, 0.6);
+  position: relative;
+  overflow: hidden;
+}
+#products > .max-w-container-max::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: linear-gradient(90deg, #ffcc05 0%, #34c2ee 50%, #92418f 100%);
+}
+@media (min-width: 768px) {
+  #products > .max-w-container-max {
+    padding: 56px 48px;
+  }
+}
+#products .prod-card {
+  border: 1px solid #e3e2e0;
+  background: linear-gradient(135deg, #ffffff 0%, #faf9f6 100%);
+}
+#products .prod-card:hover {
+  border-color: #994c9c;
+  transform: translateY(-8px);
+  box-shadow: 0 24px 50px rgba(130, 76, 150, 0.18);
+}
+#products .prod-card.featured {
+  background: linear-gradient(135deg, #994c9c 0%, #3c1340 100%);
+  border-color: transparent;
+}
+
+/* === 4. Packages — fix overlap on mobile/tablet === */
+@media (max-width: 767px) {
+  #packages .grid {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+    max-width: 100% !important;
+  }
+  #packages .grid > div {
+    transform: none !important;
+    scale: 1 !important;
+    margin: 0 !important;
+    padding: 28px 22px !important;
+    box-shadow: 0 8px 28px rgba(130, 76, 150, 0.1) !important;
+  }
+  #packages .grid > div .absolute.-top-3 {
+    position: static !important;
+    transform: none !important;
+    display: inline-block !important;
+    margin-bottom: 16px !important;
+    width: auto !important;
+  }
+}
+@media (min-width: 768px) and (max-width: 1023px) {
+  #packages .grid {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+    max-width: 480px !important;
+    margin: 0 auto !important;
+  }
+  #packages .grid > div {
+    transform: none !important;
+    scale: 1 !important;
+    margin: 0 !important;
+  }
+}
+
+/* === 5. Calendar/Roznama: complete redesign === */
+section[class*="bg-tertiary-fixed"] {
+  background: linear-gradient(135deg, #faf9f6 0%, #f0e8ee 100%) !important;
+}
+.agenda {
+  padding-right: 0 !important;
+}
+.agenda::before {
+  display: none !important;
+}
+.agenda-item {
+  background: #ffffff !important;
+  border: 1px solid rgba(208, 194, 207, 0.6) !important;
+  border-radius: 20px !important;
+  padding: 0 !important;
+  margin-bottom: 16px !important;
+  overflow: hidden !important;
+  display: grid !important;
+  grid-template-columns: 100px 1fr !important;
+  align-items: stretch !important;
+  box-shadow: 0 6px 20px rgba(130, 76, 150, 0.06) !important;
+  transition:
+    transform var(--wj-d2),
+    box-shadow var(--wj-d2),
+    border-color var(--wj-d2) !important;
+  position: relative;
+}
+.agenda-item::before {
+  display: none !important;
+}
+.agenda-item::after {
+  display: none !important;
+}
+.agenda-item:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 16px 40px rgba(130, 76, 150, 0.15) !important;
+  border-color: #994c9c !important;
+}
+.agenda-item .month {
+  grid-column: 1;
+  grid-row: 1 / -1;
+  align-self: stretch !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: linear-gradient(180deg, #994c9c 0%, #aa5fae 100%) !important;
+  color: #ffffff !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0 !important;
+  padding: 18px 8px !important;
+  margin: 0 !important;
+  text-align: center !important;
+  border-left: 4px solid #ffcc05;
+}
+.agenda-item .date {
+  display: block !important;
+  font-size: 34px !important;
+  font-weight: 800 !important;
+  color: #ffcc05 !important;
+  line-height: 1 !important;
+  margin: 0 0 4px !important;
+}
+.agenda-item .title {
+  grid-column: 2;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  color: #1a1c1a !important;
+  padding: 16px 18px 8px !important;
+  margin: 0 !important;
+  line-height: 1.5 !important;
+}
+.agenda-item .meta {
+  grid-column: 2;
+  padding: 0 18px !important;
+  margin: 0 0 8px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+  font-size: 12px !important;
+  color: #4d444e !important;
+}
+.agenda-item .meta span {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+}
+.agenda-item .meta .material-symbols-outlined {
+  color: #994c9c !important;
+  font-size: 16px !important;
+}
+.agenda-item .cta {
+  grid-column: 2;
+  margin: 0 18px 16px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  background: linear-gradient(135deg, #994c9c, #aa5fae) !important;
+  color: #ffffff !important;
+  padding: 8px 16px !important;
+  border-radius: 999px !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  width: fit-content !important;
+  transition:
+    gap var(--wj-d2),
+    transform var(--wj-d2) !important;
+}
+.agenda-item .cta:hover {
+  gap: 10px !important;
+  transform: translateX(-4px) !important;
+}
+
+@media (max-width: 767px) {
+  .agenda-item {
+    grid-template-columns: 80px 1fr !important;
+  }
+  .agenda-item .date {
+    font-size: 26px !important;
+  }
+  .agenda-item .month {
+    font-size: 10px !important;
+    padding: 14px 6px !important;
+  }
+  .agenda-item .title {
+    font-size: 13px !important;
+    padding: 12px 14px 6px !important;
+  }
+  .agenda-item .meta {
+    padding: 0 14px !important;
+    font-size: 11px !important;
+  }
+  .agenda-item .cta {
+    margin: 0 14px 12px !important;
+    font-size: 11px !important;
+    padding: 6px 12px !important;
+  }
+}
+
+/* ============================================================
+   ROUND 4 — touch targets (>=44px) on mobile
+   ============================================================ */
+@media (max-width: 767px) {
+  footer a,
+  footer button,
+  .agenda-item a,
+  .prod-card a,
+  a.inline-flex,
+  .wj-journey-node {
+    min-height: 44px;
+  }
+  footer a {
+    display: inline-flex;
+    align-items: center;
+  }
+}
+
+/* ============================================================
+   Wahaj · Video lightbox  (append to assets/css/nav.css)
+   Scoped under .wj-video-*  ·  mirrors .search-modal conventions
+   ============================================================ */
+
+/* ---------- trigger / play marker ---------- */
+.wj-video-trigger {
+  cursor: pointer;
+  border: 1px solid #d0c2cf;
+  transition:
+    box-shadow var(--wj-d2) var(--wj-e-out),
+    transform var(--wj-d2) var(--wj-e-out);
+}
+.wj-video-trigger:hover {
+  box-shadow: 0 16px 40px rgba(130, 76, 150, 0.22);
+  transform: translateY(-2px);
+}
+.wj-video-trigger__veil {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(26, 28, 26, 0.62) 0%,
+    rgba(26, 28, 26, 0.1) 45%,
+    transparent 75%
+  );
+  pointer-events: none;
+}
+.wj-video-trigger__play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: #994c9c;
+  color: #fff;
+  box-shadow: 0 8px 24px rgba(104, 52, 124, 0.45);
+  transition:
+    transform var(--wj-d2) var(--wj-e-out),
+    background var(--wj-d2) var(--wj-e-io);
+}
+.wj-video-trigger:hover .wj-video-trigger__play,
+.wj-video-trigger:focus-visible .wj-video-trigger__play {
+  transform: translate(-50%, -50%) scale(1.08);
+  background: #aa5fae;
+}
+.wj-video-trigger__play .material-symbols-outlined {
+  font-size: 34px;
+  margin-inline-start: 2px; /* optical centering of the glyph */
+}
+/* pulsing ring */
+.wj-video-trigger__ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  border: 2px solid #ffcc05;
+  animation: wjVideoPulse 2.2s var(--wj-e-out) infinite;
+}
+@keyframes wjVideoPulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.85;
+  }
+  70% {
+    transform: scale(1.55);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.55);
+    opacity: 0;
+  }
+}
+.wj-video-trigger__dur {
+  position: absolute;
+  bottom: 56px;
+  inset-inline-start: 12px;
+  background: rgba(26, 28, 26, 0.72);
+  color: #fff;
+  font-size: 12px;
+  line-height: 1;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-variant-numeric: tabular-nums;
+}
+.wj-video-trigger__label {
+  position: absolute;
+  bottom: 0;
+  inset-inline: 0;
+  display: block;
+  padding: 14px 16px;
+  text-align: start;
+  color: #fff;
+  font-weight: 600;
+  font-size: 15px;
+  font-family: var(--wj-font);
+}
+
+/* ---------- backdrop ---------- */
+.wj-video-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(26, 28, 26, 0.7);
+  backdrop-filter: blur(8px);
+  z-index: 100; /* above header (z-50) */
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity var(--wj-d2) var(--wj-e-io),
+    visibility var(--wj-d2) ease;
+}
+.wj-video-backdrop.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ---------- modal shell ---------- */
+.wj-video-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.96);
+  width: min(94vw, 960px);
+  z-index: 101;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity var(--wj-d2) var(--wj-e-io),
+    transform var(--wj-d2) var(--wj-e-out),
+    visibility var(--wj-d2) ease;
+}
+.wj-video-backdrop.open + .wj-video-modal,
+.wj-video-modal.open {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/* ---------- 16:9 stage ---------- */
+.wj-video-stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(208, 194, 207, 0.35);
+}
+.wj-video-mount,
+.wj-video-mount iframe,
+.wj-video-mount video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+  background: #000;
+}
+
+/* ---------- close button ---------- */
+.wj-video-close {
+  position: absolute;
+  top: -14px;
+  inset-inline-end: -14px;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: #faf9f6;
+  color: #1a1c1a;
+  border: 1px solid #d0c2cf;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  z-index: 2;
+  transition:
+    background var(--wj-d2) var(--wj-e-io),
+    transform var(--wj-d2) var(--wj-e-out);
+}
+.wj-video-close:hover {
+  background: #efeeeb;
+  transform: rotate(90deg);
+}
+.wj-video-close:focus-visible {
+  outline: 2px solid #994c9c;
+  outline-offset: 2px;
+}
+.wj-video-close .material-symbols-outlined {
+  font-size: 24px;
+}
+
+/* ---------- meta strip ---------- */
+.wj-video-meta {
+  margin-top: 16px;
+  text-align: start;
+  color: #faf9f6;
+}
+.wj-video-meta__title {
+  font-family: var(--wj-font);
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.5;
+  color: #faf9f6;
+}
+.wj-video-meta__dur {
+  margin-top: 4px;
+  font-size: 13px;
+  color: #d0c2cf;
+  font-variant-numeric: tabular-nums;
+}
+.wj-video-meta__dur:empty {
+  display: none;
+}
+
+/* ---------- mobile ---------- */
+@media (max-width: 640px) {
+  .wj-video-modal {
+    width: 92vw;
+  }
+  .wj-video-close {
+    top: -10px;
+    inset-inline-end: -6px;
+    width: 40px;
+    height: 40px;
+  }
+  .wj-video-meta__title {
+    font-size: 16px;
+  }
+}
+
+/* ---------- reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .wj-video-trigger,
+  .wj-video-trigger__play,
+  .wj-video-trigger img,
+  .wj-video-close,
+  .wj-video-backdrop,
+  .wj-video-modal {
+    transition: none !important;
+  }
+  .wj-video-trigger__ring {
+    animation: none !important;
+  }
+  .wj-video-close:hover {
+    transform: none;
+  }
+  .wj-video-backdrop.open + .wj-video-modal,
+  .wj-video-modal.open {
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+/* ============================================================
+   ROUND 5 — anchor offset under sticky header
+   ============================================================ */
+section[id],
+div[id],
+article[id] {
+  scroll-margin-top: 96px;
+}
+
+/* ===== Partners marquee (auto-scroll when >6) ===== */
+.wj-marquee {
+  overflow: hidden;
+  width: 100%;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+.wj-marquee__track {
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+  width: max-content;
+  animation: wj-marquee 32s linear infinite;
+}
+.wj-marquee:hover .wj-marquee__track {
+  animation-play-state: paused;
+}
+.wj-partner img,
+.wj-partner span {
+  transition:
+    filter var(--wj-d3),
+    opacity var(--wj-d3);
+}
+@keyframes wj-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wj-marquee__track {
+    animation: none;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
+/* ===== responsive-arbitrary fallbacks (Play-CDN drops md:*-[..]) ===== */
+@media (min-width: 768px) {
+  .wj-agenda-grid {
+    grid-template-columns: 100px 1fr;
+  }
+  .wj-banner-tall {
+    height: 450px;
+  }
+  .wj-banner-mid {
+    height: 360px;
+  }
+}
+@media (min-width: 1024px) {
+  .wj-harvest-img {
+    aspect-ratio: 4 / 5;
+  }
+}
+
+/* ===== زر واتساب العائم ===== */
+.wj-wa {
+  position: fixed;
+  bottom: 22px;
+  right: 22px;
+  z-index: 55;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: #25d366;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.45);
+  transition:
+    transform var(--wj-d1) var(--wj-e-io),
+    box-shadow var(--wj-d1) ease;
+}
+.wj-wa:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 10px 26px rgba(37, 211, 102, 0.55);
+}
+@media (max-width: 640px) {
+  .wj-wa {
+    bottom: 16px;
+    right: 16px;
+    width: 50px;
+    height: 50px;
+  }
+}
+@media print {
+  .wj-wa {
+    display: none;
+  }
+}
+
+/* ============================================================
+   Wahaj Motion — الانسيابية والتنقلات (توكنز موحدة)
+   ============================================================ */
+/* مفردات الحركة — المصدر الوحيد. كانت الصفحة الواحدة تحمل ١٦ مدة و٦ منحنيات
+   انسيابية، فيبدو كل عنصر متحركًا بساعته الخاصة. أربع مُدد ومنحنيان يكفيان:
+   السلّم مضاعِف تقريبًا فيُقرأ الفرق بين المستويات، والانسيابية تُختار بالدور
+   لا بالمزاج — الدخول يتباطأ بقوة، وتغيّر الحالة متماثل الطرفين. */
+:root {
+  --wj-d1: 160ms; /* دقيقة: لون · حدّ · ظل · تظليل */
+  --wj-d2: 260ms; /* أساسية: فتح · إغلاق · تبديل حالة */
+  --wj-d3: 440ms; /* كشف المحتوى عند التمرير */
+  --wj-d4: 640ms; /* كبرى: انتقال صفحة · عنصر بطل */
+
+  --wj-e-out: cubic-bezier(0.23, 1, 0.32, 1); /* الدخول: انطلاقة ثم هدوء */
+  --wj-e-io: cubic-bezier(0.62, 0.02, 0.24, 1); /* حالة تدخل وتخرج */
+  --wj-e-spring: cubic-bezier(0.34, 1.56, 0.64, 1); /* تجاوز طفيف — للمسات الدقيقة فقط */
+
+  --wj-stagger: 60ms; /* الفارق بين عنصر وتاليه في الكشف المتدرّج */
+
+  --wj-ease: var(--wj-e-out); /* اسم قديم مستخدم في قواعد كثيرة */
+}
+
+/* انتقالات بين الصفحات (تحسين تدريجي — المتصفحات الأقدم تكتفي بدخول الصفحة) */
+@view-transition {
+  navigation: auto;
+}
+@keyframes wj-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes wj-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+/* تعريف ‎::view-transition-old/new(root)‎ الفعلي أسفل الملف (كتلة Motion II).
+   كان معرّفًا هنا أيضًا بحركة مختلفة فيتصارع التعريفان ويفوز الأخير — أُزيل. */
+header[data-header] {
+  view-transition-name: wj-header;
+}
+
+/* دخول الصفحة المتدرج (يضيفه nav.js للترويسة وأول الأقسام) */
+.wj-rise {
+  animation: wj-rise var(--wj-d3) var(--wj-ease) both;
+  animation-delay: calc(var(--i, 0) * var(--wj-stagger));
+}
+
+/* كشف الأقسام عند التمرير */
+.wj-reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity var(--wj-d3) var(--wj-ease),
+    transform var(--wj-d3) var(--wj-ease);
+}
+.wj-reveal.wj-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* مؤشر تقدم القراءة أعلى الصفحة */
+.wj-progress {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 3px;
+  width: 100%;
+  transform: scaleX(0);
+  transform-origin: right; /* RTL: يمتد من اليمين */
+  background: linear-gradient(90deg, #eebe06, #994c9c);
+  z-index: 90;
+  pointer-events: none;
+}
+
+/* الصفحة الحالية في القائمة: شريط سفلي ينبثق من المنتصف */
+nav a.nav-trigger {
+  position: relative;
+}
+nav a.nav-trigger[aria-current="page"] {
+  color: #994c9c;
+  font-weight: 600;
+}
+nav a.nav-trigger[aria-current="page"]::after {
+  content: "";
+  position: absolute;
+  inset-inline: 12px;
+  bottom: 4px;
+  height: 2.5px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #994c9c, #eebe06);
+  animation: wj-bar var(--wj-d2) var(--wj-ease) both;
+}
+@keyframes wj-bar {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+} /* transform-origin الافتراضي center: RTL-safe */
+
+/* لمسات تفاعل منضبطة */
+.mega-link,
+.item-card {
+  transition:
+    transform var(--wj-d2) var(--wj-ease),
+    box-shadow var(--wj-d2) var(--wj-ease),
+    background-color var(--wj-d1) var(--wj-ease);
+}
+::selection {
+  background: #994c9c;
+  color: #fff;
+}
+
+/* احترام تفضيل تقليل الحركة — إلزامي */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .wj-progress {
+    display: none;
+  }
+}
+
+/* الطباعة وأي سياق بلا JS رصد: المحتوى ظاهر دائمًا */
+@media print {
+  .wj-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* ══════════════ طبقة الحركة الموسّعة ══════════════
+   حركة على مستوى العنصر لا القسم: كل عنوان وبطاقة وصورة تدخل بمفردها
+   وباتجاه يناسب موضعها، مع تتابع محسوب. المحرّك في nav.js.
+   قاعدة الأداء: transform + opacity فقط (تعملان على GPU بلا إعادة تخطيط). */
+/* المُدد والانسيابيات كلها معرّفة مرة واحدة أعلى الملف. هنا كان يُعاد تعريف
+   ‎--wj-d4‎ و‎--wj-stagger‎ بقيم أخرى فتُلغى القيم الأصلية بلا أن يدري أحد.
+   الباقي اسمٌ بديل واحد تستعمله قواعد الأيقونات. */
+:root {
+  --wj-e-back: var(--wj-e-spring); /* ارتداد خفيف للأيقونات */
+}
+
+/* الحالة الأولية — تُضاف بالـ JS فقط، فبلا JS يبقى كل شيء ظاهرًا */
+[data-wj-anim] {
+  opacity: 0;
+  transition:
+    opacity var(--wj-d4) var(--wj-e-out),
+    transform var(--wj-d4) var(--wj-e-out);
+  transition-delay: calc(var(--wj-i, 0) * var(--wj-stagger));
+  will-change: transform, opacity;
+}
+/* الحركة تتبع الدور لا المزاج: كلّما صغر دور العنصر قلّت مسافته ومدّته.
+   النص الطويل يكاد لا يتحرك — الفقرة التي تقفز ٣٤px تُتعب العين وتؤخّر القراءة. */
+[data-wj-anim="up"] {
+  transform: translate3d(0, 34px, 0);
+}
+[data-wj-anim="sub"] {
+  transform: translate3d(0, 18px, 0);
+  transition-duration: var(--wj-d3);
+} /* عناوين فرعية */
+[data-wj-anim="text"] {
+  transform: translate3d(0, 10px, 0);
+  transition-duration: var(--wj-d3);
+} /* فقرات */
+[data-wj-anim="down"] {
+  transform: translate3d(0, -26px, 0);
+}
+[data-wj-anim="start"] {
+  transform: translate3d(38px, 0, 0);
+} /* RTL: من اليمين */
+[data-wj-anim="end"] {
+  transform: translate3d(-38px, 0, 0);
+}
+[data-wj-anim="zoom"] {
+  transform: scale(0.9);
+}
+[data-wj-anim="pop"] {
+  transform: scale(0.72);
+  transition-timing-function: var(--wj-e-back);
+}
+[data-wj-anim="rise"] {
+  transform: translate3d(0, 48px, 0) scale(0.97);
+}
+[data-wj-anim="mask"] {
+  clip-path: inset(-50% -10% 100% -10%);
+  transform: none;
+}
+
+/* لا clip-path هنا إطلاقًا: inset(0) يقصّ عند حدود الصندوق، ونزول الحروف
+   العربية (ج ح ع ي) يتجاوزه — كان يأكل ٨px من أسفل كل عنوان في الموقع. */
+[data-wj-anim].wj-on {
+  opacity: 1;
+  transform: none;
+  clip-path: none;
+  will-change: auto;
+}
+/* نوع «القناع» وحده يحتاج قصًّا — وبهوامش سالبة تتجاوز الصندوق فلا تمسّ الحرف */
+[data-wj-anim="mask"].wj-on {
+  clip-path: inset(-50% -10% -50% -10%);
+}
+
+/* عنوان يُكشف سطرًا بعد سطر خلف قناع */
+.wj-line {
+  display: block;
+  overflow: hidden;
+}
+.wj-line > span {
+  display: block;
+  transform: translate3d(0, 105%, 0);
+  transition: transform var(--wj-d4) var(--wj-e-out);
+  transition-delay: calc(var(--wj-i, 0) * var(--wj-stagger));
+}
+.wj-line.wj-on > span {
+  transform: none;
+}
+
+/* الأرقام: عدّ تصاعدي عند الظهور (JS) + ثبات عرض الخانة حتى لا يرتجف التخطيط */
+.wj-count {
+  font-variant-numeric: tabular-nums;
+}
+
+/* الأيقونات: نبضة حياة عند دخول البطاقة، وتفاعل عند اللمس */
+.wj-icon-wrap,
+.mega-link .ic,
+.wj-bicon {
+  transition: transform var(--wj-d3) var(--wj-e-back);
+}
+.wj-on .wj-icon-wrap {
+  animation: wj-icon-in var(--wj-d4) var(--wj-e-back) both;
+}
+@keyframes wj-icon-in {
+  0% {
+    transform: scale(0.6) rotate(-8deg);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.06) rotate(2deg);
+    opacity: 1;
+  }
+  100% {
+    transform: none;
+    opacity: 1;
+  }
+}
+.group:hover .wj-icon-wrap,
+.item-card:hover .wj-icon-wrap {
+  transform: scale(1.08) rotate(-3deg);
+}
+.mega-link:hover .ic {
+  transform: scale(1.12);
+}
+
+/* البطاقات: ارتفاع وظل أعمق عند التمرير عليها */
+.item-card,
+.card-paper,
+.wj-lift {
+  transition:
+    transform var(--wj-d2) var(--wj-e-out),
+    box-shadow var(--wj-d2) var(--wj-e-out);
+}
+.item-card:hover,
+.card-paper:hover,
+.wj-lift:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 18px 42px rgba(104, 52, 124, 0.13);
+}
+
+/* الأزرار: ضغطة حقيقية + وميض يمرّ مرة واحدة عند التمرير */
+.wj-btn-a {
+  position: relative;
+  overflow: hidden;
+}
+.wj-btn-a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    115deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.28) 50%,
+    transparent 70%
+  );
+  transform: translateX(-120%);
+  transition: transform var(--wj-d4) var(--wj-e-out);
+}
+.wj-btn-a:hover::after {
+  transform: translateX(120%);
+}
+.wj-btn-a:active {
+  transform: translateY(1px) scale(0.985);
+}
+
+/* الصور: تكبير بطيء داخل إطارها عند التمرير */
+.wj-zoom {
+  overflow: hidden;
+}
+.wj-zoom img {
+  transition: transform var(--wj-d4) var(--wj-e-out);
+}
+.wj-zoom:hover img {
+  transform: scale(1.05);
+}
+
+/* شريط متحرك (الشركاء) — يتوقف عند التمرير عليه */
+.wj-marquee {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+.wj-marquee-track {
+  display: flex;
+  gap: 48px;
+  width: max-content;
+  animation: wj-marquee 38s linear infinite;
+}
+.wj-marquee:hover .wj-marquee-track {
+  animation-play-state: paused;
+}
+@keyframes wj-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* ═══════════ حركة الأيقونات والصور ═══════════ */
+
+/* الأيقونة تدخل بدوران خفيف وارتداد — ثم نبضة عند المرور عليها */
+[data-wj-ico] {
+  opacity: 0;
+  transform: scale(0.55) rotate(-14deg);
+  transition:
+    opacity var(--wj-d3) var(--wj-e-out),
+    transform var(--wj-d4) var(--wj-e-back);
+  transition-delay: calc(var(--wj-i, 0) * 60ms);
+}
+[data-wj-ico].wj-on {
+  opacity: 1;
+  transform: none;
+}
+.wj-ic-std,
+.wj-icon-wrap,
+.wj-bicon,
+.wj-bicon-lg {
+  transition: transform var(--wj-d2) var(--wj-e-back);
+}
+a:hover > .wj-ic-std,
+.group:hover .wj-ic-std,
+a:hover .wj-bicon,
+.group:hover .wj-bicon-lg {
+  transform: scale(1.1) rotate(-4deg);
+}
+
+/* الصورة تُكشف بستارة تنزل من الأعلى + تقارب لطيف (لا قفزة) */
+[data-wj-img] {
+  clip-path: inset(0 0 100% 0);
+  transform: scale(1.06);
+  transition:
+    clip-path var(--wj-d4) var(--wj-e-out),
+    transform var(--wj-d4) var(--wj-e-out),
+    opacity var(--wj-d3) var(--wj-e-out);
+  transition-delay: calc(var(--wj-i, 0) * 45ms);
+}
+[data-wj-img].wj-on {
+  clip-path: none;
+  transform: none;
+} /* none لا inset(0): لا تقصّ شيئًا بعد الكشف */
+
+/* غلاف الصورة: بريق يمرّ مرة واحدة لحظة الكشف */
+/* ‎.wj-img-wrap‎ تحتاج سياق تموضع لطبقة اللمعان ‎::after‎ فقط. كانت تفرض
+   position:relative على أي غلاف صورة — ونظرًا لأن nav.css يُحمّل بعد tw.css
+   بنفس الأولوية، كانت تهزم ‎lg:sticky‎ على صورة «حكايتنا»: تصير relative بينما
+   يظل ‎lg:top-28‎ ساريًا، فتنزل الصورة ١١٢px نزولًا دائمًا عن بداية المسار.
+   الآن التموضع في فئة مستقلة يضيفها nav.js فقط حين يكون العنصر static أصلًا. */
+.wj-img-wrap {
+  overflow: hidden;
+}
+.wj-img-wrap-rel {
+  position: relative;
+}
+.wj-img-wrap::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    115deg,
+    transparent 38%,
+    rgba(255, 255, 255, 0.34) 50%,
+    transparent 62%
+  );
+  transform: translateX(-130%);
+}
+.wj-img-wrap.wj-on::after {
+  animation: wj-sheen 1.1s var(--wj-e-out) var(--wj-d2) 1;
+}
+@keyframes wj-sheen {
+  to {
+    transform: translateX(130%);
+  }
+}
+
+/* الشعارات (الشركاء/البرامج): دخول من العمق */
+[data-wj-logo] {
+  opacity: 0;
+  transform: translateY(14px) scale(0.9);
+  transition:
+    opacity var(--wj-d4) var(--wj-e-out),
+    transform var(--wj-d4) var(--wj-e-back);
+  transition-delay: calc(var(--wj-i, 0) * 65ms);
+}
+[data-wj-logo].wj-on {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-wj-ico],
+  [data-wj-img],
+  [data-wj-logo] {
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+  }
+  .wj-img-wrap.wj-on::after {
+    animation: none;
+  }
+}
+
+/* ─── العناوين تُكشف كلمةً كلمة من خلف قناع ───
+   الحروف العربية تنزل عميقًا تحت السطر (ج ح خ ع غ م ي ن س ص ق ل) وترتفع فوقه
+   (الهمزة والمدّة والتشكيل)، فالقناع الضيّق يقصّها. الهوامش هنا سخيّة عمدًا،
+   والإزاحة 135% لتظل الكلمة مخفيةً تمامًا خلف القناع الأطول. */
+.wj-mask .w {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  /* القياس الحي: القصّ كان أعلى الحرف لا أسفله — الهوامش موزونة على ذلك */
+  /* أعمق نزول في واثق: الياء −0.483em، وأعلى ارتفاع +1.166em.
+     الهوامش سخيّة عمدًا — القناع لا يحتاج ضيقًا، والضيق يأكل أطراف الحروف. */
+  padding-block: 0.55em 0.6em;
+  margin-block: -0.55em -0.6em;
+}
+.wj-mask .wi {
+  display: inline-block;
+  transform: translateY(175%);
+  transition: transform var(--wj-d4) var(--wj-e-out);
+  transition-delay: calc(var(--d, 0) * var(--wj-stagger));
+}
+.wj-mask.wj-on .wi {
+  transform: none;
+}
+/* بعد اكتمال الكشف يُلغى القصّ تمامًا — القناع لم يعد له عمل، وبقاؤه
+   يقتطع أطراف الحروف مهما وسّعنا الهوامش. يضيف الصنف nav.js عند انتهاء الانتقال. */
+.wj-mask.wj-done .w {
+  overflow: visible;
+}
+
+/* ─── مسح التنقّل: لوحان بلون الهوية يجتاحان الشاشة بين الصفحات ───
+   رأس مائل في مقدمة الاجتياح يعطيه شخصية بدل مستطيل مسطّح. */
+.wj-wipe {
+  position: fixed;
+  inset: 0;
+  z-index: 250;
+  pointer-events: none;
+  visibility: hidden;
+}
+.wj-wipe.run,
+.wj-wipe.cover {
+  visibility: visible;
+  pointer-events: auto;
+}
+.wj-wipe .pane {
+  position: absolute;
+  inset: -1px 0;
+  transform: translateX(108%);
+  clip-path: polygon(7vw 0, 100% 0, 100% 100%, 7vw 100%, 0 50%);
+}
+.wj-wipe .pane--gold {
+  background: #ffcc05;
+}
+.wj-wipe .pane--main {
+  background: #994c9c;
+}
+.wj-wipe.run .pane--gold {
+  animation: wj-wipe-sweep 0.84s var(--wj-e-io) forwards;
+}
+.wj-wipe.run .pane--main {
+  animation: wj-wipe-sweep 0.84s var(--wj-e-io) var(--wj-d1) forwards;
+}
+.wj-wipe.cover .pane--gold {
+  animation: wj-wipe-cover var(--wj-d3) var(--wj-e-io) forwards;
+}
+.wj-wipe.cover .pane--main {
+  animation: wj-wipe-cover var(--wj-d3) var(--wj-e-io) var(--wj-d1) forwards;
+}
+@keyframes wj-wipe-sweep {
+  0% {
+    transform: translateX(108%);
+  }
+  46%,
+  54% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-112%);
+  }
+}
+@keyframes wj-wipe-cover {
+  from {
+    transform: translateX(108%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* مؤشر الانتظار داخل المسح — يظهر فقط إن تأخّر التحميل */
+.wj-wipe .load {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  opacity: 0;
+  transition: opacity var(--wj-d3) var(--wj-e-out);
+}
+.wj-wipe.waiting .load {
+  opacity: 1;
+}
+.wj-wipe .load img {
+  width: 54px;
+  height: auto;
+  animation: wj-load-mark 1.15s var(--wj-e-out) infinite;
+}
+.wj-wipe .load .bar {
+  position: relative;
+  width: 118px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.28);
+  overflow: hidden;
+  border-radius: 2px;
+}
+.wj-wipe .load .bar::after {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  width: 42%;
+  background: #ffcc05;
+  animation: wj-load-bar 1.1s var(--wj-e-io) infinite;
+}
+@keyframes wj-load-mark {
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-6px);
+  }
+}
+@keyframes wj-load-bar {
+  from {
+    inset-inline-start: -42%;
+  }
+  to {
+    inset-inline-start: 100%;
+  }
+}
+
+/* ═══════════ الافتتاحية: الشعار يتكوّن ═══════════
+   شرائح من الشعار تتجمّع على خلفية الهوية الفاتحة ثم تنكشف الصفحة.
+   تُبنى بالـ JS مرة واحدة لكل جلسة وعلى الرئيسية فقط — بلا JS لا تظهر ولا تحجب شيئًا.
+   كل شيء transform/opacity (GPU). استُبدلت بها افتتاحية «الكتاب» بطلب الفريق 2026-09-30. */
+.wj-intro {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: grid;
+  place-items: center;
+  background: #faf9f6;
+  pointer-events: none;
+}
+.wj-intro__logo {
+  position: relative;
+  width: clamp(76px, 11vw, 118px);
+  aspect-ratio: 68.71 / 91.65;
+  filter: drop-shadow(0 12px 26px rgba(104, 52, 124, 0.14));
+}
+.wj-intro__logo .pc {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+/* خمس شرائح رأسية من الصورة نفسها: تتقارب فيكتمل الشعار */
+.wj-intro__logo .pc1 {
+  clip-path: inset(0 80% 0 0);
+}
+.wj-intro__logo .pc2 {
+  clip-path: inset(0 60% 0 20%);
+}
+.wj-intro__logo .pc3 {
+  clip-path: inset(0 40% 0 40%);
+}
+.wj-intro__logo .pc4 {
+  clip-path: inset(0 20% 0 60%);
+}
+.wj-intro__logo .pc5 {
+  clip-path: inset(0 0 0 80%);
+}
+.wj-intro.run .pc {
+  animation: wj-in-piece 0.58s var(--wj-e-out) both;
+}
+.wj-intro.run .pc1 {
+  animation-delay: 0s;
+  --wj-from: -26px;
+}
+.wj-intro.run .pc2 {
+  animation-delay: 0.07s;
+  --wj-from: 26px;
+}
+.wj-intro.run .pc3 {
+  animation-delay: 0.14s;
+  --wj-from: -26px;
+}
+.wj-intro.run .pc4 {
+  animation-delay: 0.21s;
+  --wj-from: 26px;
+}
+.wj-intro.run .pc5 {
+  animation-delay: 0.28s;
+  --wj-from: -26px;
+}
+.wj-intro.run .wj-intro__logo {
+  animation: wj-in-settle 0.5s var(--wj-e-spring) 0.86s both;
+}
+.wj-intro.out {
+  animation: wj-in-fade var(--wj-d3) var(--wj-e-io) forwards;
+}
+@keyframes wj-in-piece {
+  from {
+    opacity: 0;
+    transform: translateY(var(--wj-from, -24px)) scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes wj-in-settle {
+  0% {
+    transform: scale(1);
+  }
+  45% {
+    transform: scale(1.045);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes wj-in-fade {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+/* المحتوى خلف الافتتاحية يقترب بهدوء */
+body.wj-booking > header,
+body.wj-booking > main,
+body.wj-booking > section {
+  animation: wj-in-behind 1.4s var(--wj-e-out) both;
+}
+@keyframes wj-in-behind {
+  0%,
+  40% {
+    transform: scale(0.975);
+    opacity: 0.6;
+  }
+  100% {
+    transform: none;
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wj-intro {
+    display: none;
+  }
+}
+
+/* ═══════════ شريط روزنامة وهج (ثابت في كل الصفحات) ═══════════
+   يظهر أسفل الترويسة بقالب مميز — الأصفر الذهبي على البنفسجي.
+   لا يظهر إن لم توجد فعالية قادمة، ويمكن للزائر إخفاؤه لهذه الجلسة. */
+.wj-agenda-bar {
+  position: sticky;
+  top: 0;
+  z-index: 45;
+  background: linear-gradient(100deg, #6d2f70 0%, #994c9c 45%, #b268b5 100%);
+  color: #fff;
+  box-shadow: 0 4px 18px rgba(104, 52, 124, 0.22);
+}
+.wj-agenda-bar[hidden] {
+  display: none;
+}
+.wj-ag-in {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 7px 20px;
+}
+.wj-ag-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  font-weight: 700;
+  white-space: nowrap;
+  color: #ffcc05;
+  flex-shrink: 0;
+}
+.wj-ag-label .material-symbols-outlined {
+  font-size: 18px;
+}
+.wj-ag-track {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.wj-ag-track::-webkit-scrollbar {
+  display: none;
+}
+.wj-ag-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  flex-shrink: 0;
+  background: #ffffff1c;
+  border: 1px solid #ffffff2b;
+  border-radius: 999px;
+  padding: 4px 12px 4px 8px;
+  font-size: 12.5px;
+  color: #fff;
+  white-space: nowrap;
+  transition:
+    background-color var(--wj-d1) var(--wj-ease),
+    transform var(--wj-d1) var(--wj-ease);
+}
+.wj-ag-chip:hover {
+  background: #ffffff30;
+  transform: translateY(-1px);
+}
+.wj-ag-chip > b {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #ffcc05;
+  color: #3c1340;
+  font-size: 13px;
+  font-weight: 800;
+}
+.wj-ag-m {
+  display: inline-flex;
+  flex-direction: column;
+  line-height: 1.15;
+  font-size: 10.5px;
+  opacity: 0.9;
+}
+.wj-ag-m > i {
+  font-style: normal;
+  font-size: 9.5px;
+  opacity: 0.8;
+}
+.wj-ag-t {
+  font-weight: 600;
+  max-width: 30ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.wj-ag-all {
+  flex-shrink: 0;
+  font-size: 12px;
+  font-weight: 700;
+  color: #ffcc05;
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--wj-d1);
+}
+.wj-ag-all:hover {
+  border-color: #ffcc05;
+}
+/* بطاقة وثيقة لم يُرفع ملفها: تُعرض كحالة «قيد الإعداد» لا كرابط يوهم بالنقر.
+   لا تأثيرات مرور، ولا يد المؤشر. */
+[data-doc-soon] {
+  opacity: 0.58;
+  cursor: default;
+}
+[data-doc-soon]:hover {
+  transform: none !important;
+  box-shadow: none !important;
+}
+[data-doc-soon] * {
+  pointer-events: none;
+}
+
+/* padding: 0 2px كان يجعل مساحة اللمس ١٣px عرضًا فقط — أضيق من أن تُصاب
+   بالإبهام على الجوال (الحد الموصى به ٢٤px). المربّع الآن ٣٢×٣٢. */
+.wj-ag-x {
+  flex-shrink: 0;
+  border: 0;
+  background: transparent;
+  color: #ffffffb0;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  transition:
+    color var(--wj-d1),
+    background-color var(--wj-d1);
+}
+.wj-ag-x:hover {
+  background: #ffffff1f;
+}
+.wj-ag-x:hover {
+  color: #fff;
+}
+@media (max-width: 640px) {
+  .wj-ag-in {
+    padding: 6px 14px;
+    gap: 9px;
+  }
+  .wj-ag-label span:not(.material-symbols-outlined) {
+    display: none;
+  } /* الأيقونة تكفي */
+  .wj-ag-t {
+    max-width: 18ch;
+  }
+  .wj-ag-all {
+    display: none;
+  }
+}
+
+/* ─── معيار الأيقونة الموحّد ───
+   القائمة العلوية اعتمدت 26px داخل غلاف 36px؛ نُعمّم المقاس نفسه على بقية
+   الأقسام (المركز الإعلامي كان 48px بلا غلاف، فبدا شكلًا مختلفًا). */
+.wj-ic-std {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: color-mix(in srgb, #994c9c 9%, transparent);
+  transition:
+    transform var(--wj-d2) var(--wj-e-back),
+    background-color var(--wj-d2) var(--wj-ease);
+}
+.wj-ic-std > .material-symbols-outlined,
+.wj-ic-std > .wj-icon {
+  font-size: 26px !important;
+  width: 26px;
+  height: 26px;
+  color: #994c9c;
+}
+.group:hover .wj-ic-std {
+  transform: scale(1.08);
+  background: color-mix(in srgb, #994c9c 15%, transparent);
+}
+
+/* الاختصارات على لوحة المفاتيح تُربك القارئ العربي بصريًا — تبقى فعّالة بلا عرض */
+.search-fab .kbd {
+  display: none !important;
+}
+
+/* ─── تلميح بطاقات شريط المبادرات ───
+   كان بعرض ثابت ومركزيًّا فوق البطاقة، فيخرج عن الشاشة عند البطاقة الطرفية.
+   نضيّقه على الأجهزة اللوحية، ونُزيح تلميح أول/آخر بطاقة للداخل. */
+@media (min-width: 768px) and (max-width: 1100px) {
+  .wj-tip {
+    width: 200px !important;
+  }
+}
+/* RTL: أول بطاقة على اليمين وآخرها على اليسار — نُثبّت التلميح للداخل.
+   لا بد من إلغاء left و right معًا، وإلا بقي left:50% من Tailwind فتمدّد العنصر. */
+.group:first-child > .wj-tip {
+  left: auto !important;
+  right: 0 !important;
+  transform: none !important;
+}
+.group:last-child > .wj-tip {
+  left: 0 !important;
+  right: auto !important;
+  transform: none !important;
+}
+
+/* صورة الحكاية — بديل لـ sm:h-[340px] lg:h-[430px]؛
+   القيم العشوائية مع بادئة تجاوبية تفشل صامتةً على Tailwind Play CDN. */
+.wj-story-img {
+  height: 260px;
+}
+.wj-story-grid {
+  grid-template-columns: 1fr;
+}
+@media (min-width: 1024px) {
+  .wj-story-grid {
+    grid-template-columns: minmax(0, 420px) minmax(0, 1fr);
+  }
+}
+@media (min-width: 640px) {
+  .wj-story-img {
+    height: 340px;
+  }
+}
+@media (min-width: 1024px) {
+  .wj-story-img {
+    height: 430px;
+  }
+}
+
+/* ─── مسار زمني بعمود واحد (حكايتنا) ───
+   الزيغزاغ القديم كان يترك نصفًا فارغًا يظهر فجوةً كبيرة عند تصغير الشاشة. */
+/* خيط المسار: أثرٌ باهت يمتلئ بلون الهوية بمقدار ما قطعتَه من الحكاية.
+   ‎--p‎ (من 0 إلى 1) يضبطه nav.js مع التمرير. */
+.wj-rail {
+  list-style: none;
+  --p: 0;
+}
+/* الخيطان عنصران زائفان للأب، والعنصر الزائف يُرسم بعد الأبناء المموضَعين —
+   أي فوق الدوائر. z-index صريح يعيد الترتيب الطبيعي: الخيط خلف، النقطة أمام. */
+.wj-rail::before,
+.wj-rail::after {
+  content: "";
+  position: absolute;
+  inset-block: 6px 10px;
+  inset-inline-start: 7px;
+  width: 2px;
+  border-radius: 2px;
+  z-index: 0;
+}
+.wj-rail::before {
+  background: linear-gradient(180deg, #eebe06, #3bc5f3 42%, #994c9c);
+  opacity: 0.18; /* الأثر غير المقطوع */
+}
+.wj-rail::after {
+  background: linear-gradient(180deg, #eebe06, #3bc5f3 42%, #994c9c);
+  transform-origin: top;
+  transform: scaleY(var(--p));
+  transition: transform 120ms linear; /* يتبع الإصبع لا يتأخر عنه */
+}
+/* المحطة التي بلغها القارئ تتوهّج — هالة محكومة لا بقعة ضبابية:
+   حلقة رفيعة محدّدة + وهج قصير المدى خلفها. */
+.wj-rail-i.wj-passed .wj-rail-dot {
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--dot, #994c9c) 20%, transparent),
+    0 0 9px 0 color-mix(in srgb, var(--dot, #994c9c) 45%, transparent);
+  transform: scale(1.1);
+}
+.wj-rail-dot {
+  transition:
+    transform var(--wj-d2) var(--wj-e-out),
+    box-shadow var(--wj-d2) var(--wj-e-out);
+}
+@media (prefers-reduced-motion: reduce) {
+  .wj-rail::after {
+    transform: scaleY(1);
+    transition: none;
+  }
+  .wj-rail-i.wj-passed .wj-rail-dot {
+    transform: none;
+  }
+}
+.wj-rail-dot {
+  position: absolute;
+  inset-inline-start: -33px;
+  top: 5px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--dot, #994c9c);
+  border: 3px solid #faf9f6;
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--dot, #994c9c) 40%, transparent);
+  z-index: 2; /* فوق خيطَي المسار */
+}
+@media (min-width: 640px) {
+  .wj-rail-dot {
+    inset-inline-start: -41px;
+  }
+}
+.wj-rail-now .wj-rail-dot::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 2px solid var(--dot, #994c9c);
+  opacity: 0.5;
+  animation: wj-pulse 2.4s var(--wj-e-out) infinite;
+}
+@keyframes wj-pulse {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.55;
+  }
+  70%,
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+/* انجراف بطيء لعناصر الزينة (الأشكال الخلفية) */
+.wj-drift {
+  animation: wj-drift 9s var(--wj-e-out) infinite alternate;
+}
+@keyframes wj-drift {
+  to {
+    transform: translate(-14px, 11px) rotate(0.6deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-wj-anim],
+  .wj-line > span {
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+  }
+  .wj-mask .wi {
+    transform: none !important;
+    transition: none;
+  }
+  .wj-marquee-track,
+  .wj-drift {
+    animation: none;
+  }
+  .wj-on .wj-icon-wrap {
+    animation: none;
+  }
+  .wj-wipe {
+    display: none;
+  }
+}
+@media print {
+  [data-wj-anim] {
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+  }
+  .wj-mask .wi {
+    transform: none !important;
+  }
+}
+
+/* ============ خط المنصة الرسمي — itf Wathiq (واثق) ============
+   سبعة أوزان بصيغة WOFF2 (نصف حجم OTF) مستضافة ذاتيًا — لا اعتماد على أي خدمة خارجية.
+   واثق يغطي العربية كاملة + اللاتينية + الأرقام، فهو خط الواجهة والعناوين معًا. */
+@font-face {
+  font-family: "Wathiq";
+  src: url("../fonts/itfWathiq-Light.woff2") format("woff2");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Wathiq";
+  src: url("../fonts/itfWathiq-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Wathiq";
+  src: url("../fonts/itfWathiq-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Wathiq";
+  src: url("../fonts/itfWathiq-SemiBold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Wathiq";
+  src: url("../fonts/itfWathiq-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Wathiq";
+  src: url("../fonts/itfWathiq-ExtraBold.woff2") format("woff2");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Wathiq";
+  src: url("../fonts/itfWathiq-Black.woff2") format("woff2");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* خط الهوية الرسمي (دليل الهوية) — للعناوين: بطونه أعمق وأوضح في الأحجام الكبيرة */
+@font-face {
+  font-family: "FF Shamel";
+  src:
+    url("../fonts/FFShamelUnique-Normal.woff2") format("woff2"),
+    url("../fonts/FFShamelUnique-Normal.ttf") format("truetype");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "FF Shamel";
+  src:
+    url("../fonts/FFShamelUnique-Medium.woff2") format("woff2"),
+    url("../fonts/FFShamelUnique-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-display: swap;
+}
+@font-face {
+  font-family: "FF Shamel";
+  src:
+    url("../fonts/FFShamelUnique-Bold.woff2") format("woff2"),
+    url("../fonts/FFShamelUnique-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-display: swap;
+}
+
+/* ══ خط المنصة الرسمي: itf Wathiq (واثق) ══
+   واحد للنصوص والعناوين. IBM Plex محذوف من المشروع كليًا.
+   ملاحظة: «الأحرف المأكولة» لم تكن من الخط — كانت clip-path في محرّك الحركة
+   تقتطع ٨px من نزول الحروف؛ أُصلحت. */
+:root {
+  --wj-font: "Wathiq", "Segoe UI", system-ui, sans-serif;
+  --wj-head: "Wathiq", "Segoe UI", system-ui, sans-serif;
+}
+
+html,
+body,
+button,
+input,
+select,
+textarea,
+.font-body,
+[class*="font-body"] {
+  font-family: var(--wj-font);
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+[class*="font-headline"],
+[class*="font-display"],
+[class*="font-title"] {
+  font-family: var(--wj-head) !important;
+  letter-spacing: 0 !important; /* لا تباعد أحرف مع العربية — يكسر الوصل */
+}
+
+/* ============ شريط التنقل السفلي (جوال — تجربة تطبيق) ============ */
+.wj-tabbar {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  z-index: 80;
+  display: none;
+  background: rgba(255, 253, 250, 0.96);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  border-top: 1px solid #e6dfe9;
+  padding-bottom: env(safe-area-inset-bottom, 0);
+  box-shadow: 0 -6px 24px rgba(153, 76, 156, 0.08);
+}
+.wj-tabbar .in {
+  display: flex;
+}
+.wj-tabbar a {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 9px 2px 7px;
+  text-decoration: none;
+  color: #756a7c;
+  font-size: 10.5px;
+  font-weight: 600;
+  transition:
+    color var(--wj-d1) var(--wj-ease),
+    transform var(--wj-d1) var(--wj-ease);
+}
+.wj-tabbar a svg {
+  width: 23px;
+  height: 23px;
+}
+.wj-tabbar a.on {
+  color: #994c9c;
+}
+.wj-tabbar a.on svg {
+  transform: translateY(-1px);
+}
+.wj-tabbar a:active {
+  transform: scale(0.94);
+}
+@media (max-width: 768px) {
+  .wj-tabbar {
+    display: block;
+  }
+  body {
+    padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px));
+  }
+  /* زر واتساب فوق شريط التبويب لا تحته: الشريط (64px) كان يغطي ٤٠px من الزر
+     (56px) فلا يبقى منه للمس إلا ٢٢px. الانتقاء الثاني للزر المكتوب يدويًا
+     في كل صفحة بفئات Tailwind — لذا !important ليتغلّب على bottom-6. */
+  .wj-wa,
+  a[href*="wa.me/"].fixed {
+    bottom: calc(76px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+}
+
+/* ============================================================
+   Wahaj Motion II — التنقلات السينمائية والتوقيع البصري
+   ============================================================ */
+/* ‎--wj-d4‎ يُعرَّف مرة واحدة مع بقية المفردات أعلى الملف — كان يُعاد تعريفه هنا
+   بـ560ms فيختلف عن 620ms المذكورة في تعليق آخر، ولا أحد يدري أيّهما السارية. */
+
+/* انتقال الصفحات: انزلاق اتجاهي أنيق (RTL) + عمق خفيف */
+@keyframes wj-page-out {
+  to {
+    opacity: 0;
+    transform: translateX(2.5%) scale(0.992);
+  }
+}
+@keyframes wj-page-in {
+  from {
+    opacity: 0;
+    transform: translateX(-2.5%) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+::view-transition-old(root) {
+  animation: wj-page-out var(--wj-d2) var(--wj-ease) both;
+}
+::view-transition-new(root) {
+  animation: wj-page-in var(--wj-d4) var(--wj-ease) both;
+}
+
+/* ══════════════ طبقة القراءة (صفحة المقال) ══════════════
+   القياس على مقالات حقيقية أظهر ٩٩–١٢٢ محرفًا في السطر على الحاسب، والمدى
+   المريح للعربية ٦٠–٨٥؛ فوقه ترتدّ العين إلى السطر الخطأ. كما كان الارتفاع
+   السطري ١٫٥٦ على الحاسب و٢٫٠ على الجوال — قاعدتان لنصٍّ واحد.
+   القواعد هنا مُنطَّقة داخل ‎.wj-prose‎ فتغلب فئات Tailwind بالتخصيص لا بالترتيب. */
+.wj-prose {
+  max-width: 42rem;
+  margin-inline: auto;
+} /* ٦٧٢px ≈ ٦٦ محرفًا/سطر */
+
+.wj-prose p {
+  font-size: 1.1875rem; /* 19px — العربية تستحق حجمًا أكبر قليلًا */
+  line-height: 1.75;
+  margin-bottom: 1.15em; /* تتنفّس دون أن تتباعد — ١٫٥em كانت تفكّك النص */
+  color: #2c2830;
+}
+.wj-prose p:last-child {
+  margin-bottom: 0;
+}
+
+.wj-prose h2 {
+  font-size: 1.6rem;
+  line-height: 1.4;
+  font-weight: 800; /* بِرِيسِت Tailwind يُرجع العناوين إلى inherit فتخرج بوزن 400 */
+  color: #994c9c; /* لون الهوية — نفس ما يراه المحرّر في اللوحة */
+  margin: 1.9em 0 0.6em; /* مساحة قبل العنوان أكبر مما بعده: ينتمي لما يليه */
+  scroll-margin-top: 96px; /* لا يختفي تحت الترويسة عند القفز إليه */
+}
+.wj-prose h2:first-child {
+  margin-top: 0;
+}
+
+.wj-prose h3 {
+  font-size: 1.28rem;
+  line-height: 1.45;
+  font-weight: 700;
+  color: #7d3e81;
+  margin: 1.9em 0 0.6em;
+  scroll-margin-top: 96px;
+}
+.wj-prose h4 {
+  font-size: 1.12rem;
+  font-weight: 700;
+  color: #3d2a44;
+  margin: 1.6em 0 0.5em;
+}
+
+.wj-prose blockquote {
+  font-size: 1.15rem;
+  line-height: 1.8;
+  margin: 2em 0;
+  padding: 1em 1.25em;
+  border-inline-start: 3px solid #994c9c;
+  background: #f8f2f8;
+  border-radius: 0.6rem;
+  color: #4a4050;
+}
+.wj-prose blockquote p {
+  font-size: inherit;
+  margin-bottom: 0.6em;
+  color: inherit;
+}
+.wj-prose blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+/* قوائم المحرّر تصل بلا فئات، وبِرِيسِت Tailwind يُلغي النقاط والترقيم */
+.wj-prose ul,
+.wj-prose ol {
+  margin: 1.4em 0;
+  padding-inline-start: 1.5em;
+}
+.wj-prose ul {
+  list-style: disc;
+}
+.wj-prose ol {
+  list-style: decimal;
+}
+.wj-prose li {
+  font-size: 1.1875rem;
+  line-height: 1.85;
+  color: #2c2830;
+  margin-bottom: 0.5em;
+}
+.wj-prose li::marker {
+  color: #994c9c;
+}
+
+.wj-prose a {
+  color: #994c9c;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+.wj-prose a:hover {
+  color: #7d3e81;
+}
+.wj-prose strong,
+.wj-prose b {
+  font-weight: 700;
+  color: inherit;
+} /* يرث لون المحرّر إن لُوِّن النص */
+.wj-prose hr {
+  border: 0;
+  border-top: 2px solid #e8dde7;
+  margin: 2.2em 0;
+}
+.wj-prose font[color] {
+  font-weight: inherit;
+} /* لون المحرّر يمر كما هو */
+.wj-prose span[style*="background"] {
+  padding: 0 0.15em;
+  border-radius: 0.2em;
+} /* تظليل المحرّر */
+.wj-prose u {
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 0.18em;
+}
+.wj-prose img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.6rem;
+}
+
+/* أول فقرة: مدخلٌ أوسع قليلًا يشدّ إلى النص */
+.wj-prose > p:first-of-type {
+  font-size: 1.25rem;
+  line-height: 1.75;
+  color: #1a1c1a;
+}
+
+/* استهلال: «عنوان» كتبه الكاتب من عدة أسطر — يُعرض مقدمةً مميّزة لا عنوان قسم */
+.wj-prose .wj-lead {
+  font-size: 1.2rem;
+  line-height: 1.8;
+  font-weight: 500;
+  color: #4a4050;
+  padding: 0.85em 1.15em;
+  margin: 0 0 1.6em;
+  border-inline-start: 3px solid #994c9c;
+  background: #f8f2f8;
+  border-radius: 0.6rem;
+}
+/* آية: أقواس مزهّرة، وسط الصفحة، بلون الهوية الداكن */
+.wj-prose .wj-ayah {
+  text-align: center;
+  font-size: 1.5rem;
+  line-height: 2;
+  color: #5e2f62; /* الخطوط النسخية أصغر بصريًا */
+  margin: 1.2em 0 1.5em;
+  /* خط نسخي تقليدي فيه الأقواس المزهّرة ﴿ ﴾ — خط المنصة لا يحويها فتظهر كأقواس عادية */
+  font-family:
+    "Amiri Quran", "Amiri", "Scheherazade New", "Noto Naskh Arabic", "Traditional Arabic",
+    "Sakkal Majalla", "KFGQPC Uthman Taha Naskh", "Geeza Pro", serif;
+}
+.wj-prose .wj-ayah .wj-ref {
+  display: block;
+  font-size: 0.85rem;
+  color: #6b6270;
+  margin-top: 0.25em;
+}
+
+@media (max-width: 767px) {
+  .wj-prose {
+    max-width: none;
+  }
+  .wj-prose p {
+    font-size: 1.0625rem;
+    line-height: 1.9;
+    margin-bottom: 1.35em;
+  }
+  .wj-prose > p:first-of-type {
+    font-size: 1.125rem;
+  }
+  .wj-prose h2 {
+    font-size: 1.35rem;
+    margin-top: 1.9em;
+  }
+  .wj-prose h3 {
+    font-size: 1.15rem;
+  }
+  .wj-prose li {
+    font-size: 1.0625rem;
+    line-height: 1.9;
+  }
+}
+
+/* ── فهرس المقال: يظهر للمقالات الطويلة فقط (٣ عناوين فأكثر) ── */
+.wj-toc {
+  font-size: 0.86rem;
+}
+.wj-toc-title {
+  font-weight: 700;
+  font-size: 0.8rem;
+  color: #6b6270;
+  margin-bottom: 0.6rem;
+}
+.wj-toc a {
+  display: block;
+  padding: 0.38rem 0.7rem;
+  border-radius: 0.5rem;
+  color: #6b6270;
+  line-height: 1.5;
+  text-decoration: none;
+  border-inline-start: 2px solid transparent;
+  transition:
+    color var(--wj-d1) var(--wj-e-io),
+    background-color var(--wj-d1) var(--wj-e-io);
+}
+.wj-toc a:hover {
+  color: #994c9c;
+  background: #f7edf8;
+}
+.wj-toc a.on {
+  color: #994c9c;
+  background: #f7edf8;
+  border-inline-start-color: #994c9c;
+  font-weight: 600;
+}
+/* الشبكة تُفعَّل فقط حين يوجد فهرس فعليًا (يضيف nav.js الفئة).
+   بدون هذا الشرط كان الفهرس المخفي بـ hidden لا يُحسب عنصر شبكة، فيقع النصّ
+   في العمود الأول (15rem) وينهار عرضه إلى ٢٣٣px. */
+@media (min-width: 1024px) {
+  .wj-read.has-toc {
+    display: grid;
+    grid-template-columns: 12rem minmax(0, 1fr);
+    gap: 2rem;
+    align-items: start;
+  }
+  .wj-read.has-toc .wj-prose {
+    margin-inline: 0;
+  }
+  .wj-toc-wrap {
+    position: sticky;
+    top: 6.5rem;
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+}
+@media (max-width: 1023px) {
+  .wj-toc-wrap {
+    margin-bottom: 2rem;
+  }
+  .wj-toc {
+    background: #faf9f6;
+    border: 1px solid #e3dde2;
+    border-radius: 0.9rem;
+    padding: 0.9rem 1rem;
+  }
+}
+
+/* ── مؤشّر تقدّم القراءة ── */
+.wj-readbar {
+  position: fixed;
+  inset-inline: 0;
+  top: 0;
+  height: 3px;
+  z-index: 60;
+  background: linear-gradient(90deg, #ffcc05, #3bc5f3 45%, #994c9c);
+  transform-origin: right; /* RTL: يمتلئ من اليمين */
+  transform: scaleX(var(--rp, 0));
+  transition: transform 90ms linear;
+  pointer-events: none;
+}
+
+/* ── أزرار المشاركة ── */
+.wj-share {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.wj-share > span {
+  font-size: 0.85rem;
+  color: #6b6270;
+  margin-inline-end: 0.25rem;
+}
+.wj-share button,
+.wj-share a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 999px;
+  background: #f4f3f1;
+  color: #4d444e;
+  border: 1px solid #e3dde2;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.82rem;
+  transition:
+    background-color var(--wj-d1) var(--wj-e-io),
+    color var(--wj-d1) var(--wj-e-io),
+    border-color var(--wj-d1) var(--wj-e-io);
+}
+.wj-share button:hover,
+.wj-share a:hover {
+  background: #f7edf8;
+  color: #994c9c;
+  border-color: #d0c2cf;
+}
+.wj-share button.done {
+  width: auto;
+  padding-inline: 0.9rem;
+  background: #eaf6ec;
+  color: #1e5c22;
+  border-color: #c6e6cb;
+}
+@media (prefers-reduced-motion: reduce) {
+  .wj-readbar {
+    transition: none;
+  }
+}
+
+/* ── تدرّج فتح القائمة المنسدلة ──
+   كانت الروابط تظهر دفعة واحدة مع الصندوق. الآن تدخل متتابعة من اليمين
+   (اتجاه القراءة)، فيتبع النظر مسارًا بدل أن يُقذف بكل شيء معًا.
+   ‎--n‎ يضبطه nav.js بترتيب كل رابط داخل قائمته. */
+.mega-link {
+  opacity: 0;
+  transform: translate3d(14px, 6px, 0);
+  transition:
+    opacity var(--wj-d2) var(--wj-e-out),
+    transform var(--wj-d2) var(--wj-e-out);
+  transition-delay: 0ms;
+}
+.nav-item.open .mega .mega-link,
+.nav-item:hover .mega .mega-link,
+.nav-item:focus-within .mega .mega-link {
+  opacity: 1;
+  transform: none;
+  transition-delay: calc(var(--n, 0) * 34ms + 40ms);
+}
+@media (prefers-reduced-motion: reduce) {
+  .mega-link {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+/* ── انتقال العنصر المشترك: البطاقة تنمو لتصير رأس صفحتها ──
+   الأسماء تُعلَّق لحظة النقر (nav.js) وتُزال بعد الوصول، لأن الاسم الواحد
+   لا يجوز أن يحمله عنصران في اللقطة نفسها وإلا أُلغي الانتقال كله. */
+::view-transition-group(wj-hero-img),
+::view-transition-group(wj-hero-title) {
+  animation-duration: var(--wj-d4);
+}
+::view-transition-old(wj-hero-img),
+::view-transition-new(wj-hero-img) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+::view-transition-old(wj-hero-title) {
+  animation: wj-fade-out var(--wj-d2) var(--wj-e-io) both;
+}
+::view-transition-new(wj-hero-title) {
+  animation: wj-rise var(--wj-d3) var(--wj-e-out) both;
+}
+
+/* توقيع الهوية: خيط متدرج يُرسم تحت الترويسة عند فتح كل صفحة */
+header[data-header] {
+  position: sticky;
+}
+header[data-header]::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: -1px;
+  height: 2.5px;
+  background: linear-gradient(90deg, #ffcc05, #3bc5f3 45%, #994c9c);
+  transform: scaleX(0);
+  transform-origin: right;
+  animation: wj-signature 900ms var(--wj-ease) var(--wj-d1) both;
+  pointer-events: none;
+}
+@keyframes wj-signature {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* دخول أغنى: صعود + اقتراب خفيف */
+@keyframes wj-rise {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.99);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.wj-reveal {
+  transform: translateY(20px);
+}
+
+/* بطاقات الأقسام تتوالى واحدة تلو الأخرى عند الكشف */
+.wj-reveal .item-card,
+.wj-reveal .card-paper,
+.wj-reveal .group {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity var(--wj-d3) var(--wj-ease),
+    transform var(--wj-d3) var(--wj-ease);
+  transition-delay: calc(var(--ci, 0) * 55ms);
+}
+.wj-reveal.wj-in .item-card,
+.wj-reveal.wj-in .card-paper,
+.wj-reveal.wj-in .group {
+  opacity: 1;
+  transform: none;
+}
+
+/* القائمة الضخمة: روابطها تتفتح بتتابع */
+.nav-item:hover .mega .mega-link,
+.nav-item.open .mega .mega-link,
+.nav-item:focus-within .mega .mega-link {
+  animation: wj-rise var(--wj-d2) var(--wj-ease) both;
+}
+.mega .mega-link:nth-child(1) {
+  animation-delay: var(--wj-d1);
+}
+.mega .mega-link:nth-child(2) {
+  animation-delay: var(--wj-d1);
+}
+.mega .mega-link:nth-child(3) {
+  animation-delay: var(--wj-d1);
+}
+.mega .mega-link:nth-child(4) {
+  animation-delay: var(--wj-d1);
+}
+.mega .mega-link:nth-child(5) {
+  animation-delay: var(--wj-d1);
+}
+.mega .mega-link:nth-child(6) {
+  animation-delay: var(--wj-d1);
+}
+.mega .mega-link:nth-child(7) {
+  animation-delay: var(--wj-d2);
+}
+.mega .mega-link:nth-child(8) {
+  animation-delay: var(--wj-d2);
+}
+
+/* أزرار الدعوة الرئيسية: رفع ونبض ضغط حقيقي */
+a[class*="rounded-full"][class*="bg-primary"],
+a[class*="rounded-full"][class*="bg-secondary"] {
+  transition:
+    transform var(--wj-d1) var(--wj-ease),
+    box-shadow var(--wj-d1) var(--wj-ease),
+    background-color var(--wj-d1) var(--wj-ease);
+}
+a[class*="rounded-full"][class*="bg-primary"]:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(153, 76, 156, 0.3);
+}
+a[class*="rounded-full"][class*="bg-primary"]:active {
+  transform: translateY(1px) scale(0.98);
+  box-shadow: none;
+}
+a[class*="rounded-full"][class*="bg-secondary"]:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(255, 204, 5, 0.35);
+}
+
+/* الشريط السفلي يطلع بانزلاق عند الفتح */
+.wj-tabbar {
+  animation: wj-tab-in var(--wj-d3) var(--wj-ease) var(--wj-d2) both;
+}
+@keyframes wj-tab-in {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: none;
+  }
+}
+
+/* روابط التذييل: انزياح لطيف */
+footer a {
+  transition:
+    color var(--wj-d1) var(--wj-ease),
+    padding-inline-start var(--wj-d1) var(--wj-ease);
+}
+footer li a:hover {
+  padding-inline-start: 6px;
+}
+
+/* ============================================================
+   نقشة الهوية الرسمية (واو وهج) — نسيج خفي أصيل
+   الشفافية مخبوزة داخل الصور: صفر تأثير على النصوص
+   ============================================================ */
+footer {
+  background-image: url("../img/wahaj-pattern-light.webp");
+  background-size: 680px auto;
+  background-position: left bottom;
+}
+/* القوائم المنسدلة بيضاء نقية — النقشة أزعجت وضوح المحتوى فأُزيلت */
+
+/* ============================================================
+   أيقونات الهوية + نقشة الأقسام + تلميع الهيدر
+   ============================================================ */
+/* أيقونات وهج الرسمية في القوائم */
+.mega .ic .wj-bicon {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+}
+.mega-link:hover .wj-bicon {
+  transform: scale(1.08);
+  transition: transform var(--wj-d1) var(--wj-ease);
+}
+
+/* نقشة الواو على الأقسام البنفسجية (شفافيتها مخبوزة) */
+.wj-idpat {
+  background-image: url("../img/wahaj-pattern-light.webp");
+  background-size: 950px auto;
+  background-position: left bottom;
+}
+
+/* ---- الهيدر: أهدأ وأفخم ---- */
+header[data-header] .nav-trigger {
+  border-radius: 999px;
+  padding-inline: 14px;
+  transition:
+    background-color var(--wj-d1) var(--wj-ease),
+    color var(--wj-d1) var(--wj-ease);
+}
+header[data-header] .nav-trigger:hover {
+  background: #f7edf8;
+  color: #994c9c;
+}
+header[data-header].wj-scrolled {
+  box-shadow: 0 8px 30px rgba(60, 19, 64, 0.1);
+}
+header[data-header] [data-search-open] {
+  border-radius: 999px;
+  transition:
+    border-color var(--wj-d1) var(--wj-ease),
+    box-shadow var(--wj-d1) var(--wj-ease);
+}
+header[data-header] [data-search-open]:hover {
+  border-color: #994c9c;
+  box-shadow: 0 4px 14px rgba(153, 76, 156, 0.14);
+}
+header[data-header] img[alt="شعار وهج"] {
+  transition:
+    transform var(--wj-d2) var(--wj-ease),
+    height var(--wj-d2) var(--wj-ease);
+}
+header[data-header] a:hover > img[alt="شعار وهج"] {
+  transform: scale(1.05) rotate(-3deg);
+}
+
+/* ============================================================
+   الهيدر II — كبسولة التنقل + التكثّف عند التمرير
+   ============================================================ */
+/* كبسولة تحتضن روابط القائمة */
+/* القائمة تجلس على سطح الترويسة مباشرة.
+   كانت داخل كبسولة بيضاء بشفافية ٦٦٪ فوق خلفية شبه بيضاء: لا تُرى كعنصر،
+   وتُحدث «حبّة داخل حبّة» مع كبسولة الصفحة النشطة. */
+header[data-header] nav[aria-label="القائمة الرئيسية"] {
+  background: none;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 0;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  /* شعار ← فجوة قصيرة ← قائمة ← الفراغ كله ← أزرار الإجراء.
+     في RTL ‏inline-start هو اليمين: الفجوة القصيرة تخصّ جانب الشعار،
+     والفراغ التلقائي يدفع أزرار الإجراء إلى أقصى اليسار. */
+  margin-inline-start: 22px;
+  margin-inline-end: auto;
+  gap: 2px;
+}
+header[data-header] .nav-trigger {
+  padding-block: 7px;
+}
+
+/* الصفحة الحالية: حبة ممتلئة بخيط الهوية */
+nav a.nav-trigger[aria-current="page"] {
+  background: none;
+  font-weight: 600;
+}
+nav a.nav-trigger[aria-current="page"]::after {
+  inset-inline: 16px;
+  bottom: 4px;
+  height: 2px;
+}
+
+/* سهم القوائم يدور عند الفتح */
+.nav-trigger .chev {
+  transition: transform var(--wj-d2) var(--wj-ease);
+}
+.nav-item:hover .chev,
+.nav-item.open .chev,
+.nav-item:focus-within .chev {
+  transform: rotate(180deg);
+}
+
+/* خيط الهوية أعلى كل قائمة منسدلة */
+.nav-item .mega::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  inset-inline: 18px;
+  height: 2.5px;
+  border-radius: 0 0 3px 3px;
+  background: linear-gradient(90deg, #ffcc05, #3bc5f3 45%, #994c9c);
+  opacity: 0.9;
+}
+
+/* زر «ابدأ الرحلة»: تدرج الهوية */
+header[data-header] a[href="join.html"] {
+  background-image: linear-gradient(120deg, #994c9c, #aa5fae 55%, #8a3f8f);
+  box-shadow: 0 6px 18px rgba(153, 76, 156, 0.28);
+}
+
+/* حبة البحث: زجاجية بيضاء وكيبورد بهوية أنيقة */
+.search-fab {
+  background: rgba(255, 255, 255, 0.72);
+}
+.search-fab .kbd {
+  border-radius: 6px;
+  background: #f7edf8;
+  border-color: #e5cfe6;
+  color: #994c9c;
+  font-weight: 700;
+}
+
+/* التكثّف عند التمرير: الهيدر يضمر بنعومة */
+header[data-header] > div {
+  transition: padding var(--wj-d2) var(--wj-ease);
+}
+header[data-header].wj-scrolled > div {
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+header[data-header].wj-scrolled img[alt="شعار وهج"] {
+  height: 36px;
+}
+header[data-header].wj-scrolled {
+  background: rgba(250, 249, 246, 0.97);
+}
+
+/* ============================================================
+   احترافية التنقل III — ثبات العناصر + تلميعات
+   ============================================================ */
+/* الشريط السفلي وزر واتساب يثبتان أثناء انتقال الصفحات (بلا وميض) */
+.wj-tabbar {
+  view-transition-name: wj-tabbar;
+}
+.wj-wa {
+  view-transition-name: wj-wa;
+}
+
+/* التبويب النشط في شريط الجوال: حبة بنفسجية ناعمة */
+.wj-tabbar a.on {
+  position: relative;
+}
+.wj-tabbar a.on::before {
+  content: "";
+  position: absolute;
+  top: 5px;
+  right: 50%;
+  transform: translateX(50%);
+  width: 44px;
+  height: 30px;
+  border-radius: 999px;
+  background: #f7edf8;
+  z-index: -1;
+}
+
+/* حلقات تركيز موحدة لكل الموقع (وصولية + احترافية) */
+:focus-visible {
+  outline: 2px solid #994c9c;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* نتائج البحث الحية: شارة المجموعة */
+.search-result .live-tag {
+  font-size: 10px;
+  font-weight: 700;
+  background: #f7edf8;
+  color: #994c9c;
+  border-radius: 999px;
+  padding: 1px 8px;
+  margin-inline-start: auto;
+}
+
+/* أيقونات الهوية الكبيرة (فئات المستفيدين + بطاقات المنتجات) */
+.wj-bicon-lg {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+}
+@media (min-width: 1024px) {
+  .wj-bicon-lg {
+    width: 40px;
+    height: 40px;
+  }
+}
+.prod-card .icon-bubble .wj-bicon-lg {
+  width: 38px;
+  height: 38px;
+}
+.prod-card:hover .wj-bicon-lg,
+.group:hover .wj-bicon-lg {
+  transform: scale(1.1);
+  transition: transform var(--wj-d2) var(--wj-ease);
+}
+.prod-card.featured .icon-bubble {
+  background: #ffffff;
+}
+
+/* ══════════════════════════════════════════════════════════
+   لوحة الجوال — صحيفة تغطّي الشاشة، لا شريحة تدفع الصفحة
+   القواعد كلها داخل نطاق الجوال حتى تبقى lg:hidden هي الحاكمة فوقه
+   ══════════════════════════════════════════════════════════ */
+@media (max-width: 1023.98px) {
+  #mobile-menu.wj-sheet {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    height: 100dvh;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: #fffdfa;
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px);
+    transition:
+      opacity var(--wj-d2) var(--wj-e-io),
+      transform var(--wj-d3) var(--wj-e-out),
+      visibility 0s linear var(--wj-d3);
+  }
+
+  #mobile-menu.wj-sheet.on {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition:
+      opacity var(--wj-d2) var(--wj-e-io),
+      transform var(--wj-d3) var(--wj-e-out),
+      visibility 0s;
+  }
+
+  /* ــــ رأس اللوحة ــــ */
+  .wj-sheet__top {
+    position: relative;
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 20px;
+    border-bottom: 1px solid #efe9ee;
+    background: #fffdfa;
+  }
+  .wj-sheet__top img {
+    height: 40px;
+    width: auto;
+  }
+  .wj-sheet__x {
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    border: 0;
+    border-radius: 999px;
+    background: #f7edf8;
+    color: #994c9c;
+    cursor: pointer;
+    transition:
+      background var(--wj-d1) var(--wj-ease),
+      transform var(--wj-d1) var(--wj-e-spring);
+  }
+  .wj-sheet__x:active {
+    transform: scale(0.92);
+  }
+
+  /* شريط الهوية الرفيع أسفل الرأس */
+  .wj-sheet__top::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    bottom: -1px;
+    height: 3px;
+    background: linear-gradient(90deg, #994c9c, #3bc5f3 55%, #ffcc05);
+  }
+
+  /* ــــ جسم اللوحة ــــ */
+  .wj-sheet__body {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 6px 14px 18px;
+    overscroll-behavior: contain;
+  }
+
+  /* دخول متدرّج للبنود */
+  .wj-sheet__body > * {
+    opacity: 0;
+    transform: translateY(9px);
+  }
+  .wj-sheet.on .wj-sheet__body > * {
+    animation: wj-sheet-item var(--wj-d3) var(--wj-e-out) both;
+    animation-delay: calc(70ms + var(--i, 0) * var(--wj-stagger));
+  }
+  @keyframes wj-sheet-item {
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  /* ــــ التذييل: إجراءات سريعة ــــ */
+  .wj-sheet__foot {
+    flex: 0 0 auto;
+    padding: 12px 16px calc(14px + env(safe-area-inset-bottom, 0px));
+    border-top: 1px solid #efe9ee;
+    background: #faf7f9;
+  }
+  .wj-sheet__cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    height: 50px;
+    border-radius: 15px;
+    background: #994c9c;
+    color: #fff;
+    font-weight: 700;
+    font-size: 15px;
+    text-decoration: none;
+    transition:
+      transform var(--wj-d1) var(--wj-e-spring),
+      background var(--wj-d1) var(--wj-ease);
+  }
+  .wj-sheet__cta:active {
+    transform: scale(0.975);
+    background: #7d3e81;
+  }
+  .wj-sheet__quick {
+    display: flex;
+    gap: 8px;
+    margin-top: 9px;
+  }
+  .wj-sheet__quick a {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    height: 44px;
+    border-radius: 13px;
+    text-decoration: none;
+    background: #fff;
+    border: 1px solid #e9e2e8;
+    color: #4d444e;
+    font-size: 13px;
+    font-weight: 600;
+    transition:
+      border-color var(--wj-d1) var(--wj-ease),
+      color var(--wj-d1) var(--wj-ease);
+  }
+  .wj-sheet__quick a:active {
+    border-color: #994c9c;
+    color: #994c9c;
+  }
+  .wj-sheet__quick .wj-icon {
+    width: 17px;
+    height: 17px;
+  }
+
+  /* ــــ البنود المفردة داخل اللوحة ــــ */
+  #mobile-menu.wj-sheet > .wj-sheet__body > a {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 14px 12px;
+    border-radius: 13px;
+    font-size: 15.5px;
+    font-weight: 600;
+    color: #1a1c1a;
+    text-decoration: none;
+    border-bottom: 1px solid #efeeeb;
+  }
+  #mobile-menu.wj-sheet .wj-sheet__body > a[aria-current="page"] {
+    background: #f7edf8;
+    color: #994c9c;
+    border-bottom-color: transparent;
+  }
+
+  /* ــــ الأكورديون داخل اللوحة ــــ */
+  .wj-sheet .m-acc__btn {
+    font-family: inherit;
+    font-size: 15.5px;
+    font-weight: 600;
+    padding: 15px 12px;
+  }
+  .wj-sheet .m-acc__panel {
+    padding-bottom: 4px;
+  }
+  .wj-sheet .m-acc.open .m-acc__panel {
+    max-height: 1600px;
+  }
+
+  /* رابط غنيّ: أيقونة + اسم + وصف — هذا ما يميّز اللوحة عن الشريط السفلي
+     المحدّدات مضاعفة الأخصّية لأن ‎.m-acc__panel a‎ الأقدم يفرض display:block */
+  .wj-sheet .m-acc__panel a.m-link {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 9px 10px;
+    border-radius: 12px;
+    border-right: 0;
+    border-bottom: 0;
+    text-decoration: none;
+    color: #1a1c1a;
+    transition: background var(--wj-d1) var(--wj-e-io);
+  }
+  .wj-sheet .m-acc__panel a.m-link:active,
+  .wj-sheet .m-acc__panel a.m-link:hover {
+    background: #f7edf8;
+    color: #1a1c1a;
+  }
+  .wj-sheet .m-link .ic {
+    flex: 0 0 auto;
+    width: 38px;
+    height: 38px;
+    border-radius: 11px;
+    display: grid;
+    place-items: center;
+    background: #f7f4f6;
+  }
+  .wj-sheet .m-link .ic img {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+  }
+  .wj-sheet .m-link .txt {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    min-width: 0;
+  }
+  .wj-sheet .m-link .wj-name {
+    font-size: 14.5px;
+    font-weight: 600;
+    line-height: 1.35;
+  }
+  .wj-sheet .m-link .wj-desc {
+    font-size: 12px;
+    color: #756a7c;
+    line-height: 1.45;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* عناوين المجموعات داخل اللوحة */
+  .wj-sheet__grp {
+    /* ‎#a3959f‎ كان تباينه 2.81:1 — عنوان مجموعة يجب أن يُقرأ لا أن يُلمَح */
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #6d6470;
+    padding: 14px 12px 5px;
+    letter-spacing: 0;
+  }
+
+  /* الشريط السفلي يختفي ما دامت اللوحة مفتوحة */
+  body.wj-sheet-open .wj-tabbar,
+  body.wj-sheet-open .wj-agenda-bar,
+  body.wj-sheet-open a[href*="wa.me/"].fixed {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--wj-d1) var(--wj-e-io);
+  }
+
+  body.wj-sheet-open {
+    overflow: hidden;
+  }
+}
+
+@media (max-width: 1023.98px) and (prefers-reduced-motion: reduce) {
+  #mobile-menu.wj-sheet,
+  .wj-sheet.on .wj-sheet__body > * {
+    transition: none;
+    animation: none;
+  }
+  .wj-sheet__body > * {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* شريط الروزنامة يثبت عبر انتقال الصفحات مثل الترويسة والشريط السفلي */
+.wj-agenda-bar {
+  view-transition-name: wj-agenda;
+}
+
+/* ══════════════════════════════════════════════════════════
+   الترويسة — نسخة مُعاد ترتيبها
+   ══════════════════════════════════════════════════════════ */
+
+/* سطح صريح بدل شبه شفاف: الترويسة لاصقة، والمحتوى يمرّ تحتها */
+header[data-header] {
+  background: #fffdfa;
+  border-bottom: 1px solid #efe9ee;
+}
+header[data-header].wj-scrolled {
+  background: #fffdfaf7;
+}
+
+/* الشعار هو أضعف عنصر في الترويسة حجمًا (٣٣px عرضًا) وهو صاحبها */
+header[data-header] img[alt="شعار وهج"] {
+  height: 48px;
+}
+header[data-header].wj-scrolled img[alt="شعار وهج"] {
+  height: 40px;
+}
+
+/* فاصل رفيع يربط الشعار بالقائمة بدل أن يتركهما جزيرتين */
+@media (min-width: 1024px) {
+  header[data-header] > div > a:first-child {
+    position: relative;
+    padding-inline-end: 22px;
+  }
+  header[data-header] > div > a:first-child::after {
+    content: "";
+    position: absolute;
+    inset-inline-end: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1px;
+    height: 26px;
+    background: #e6dee5;
+  }
+}
+
+/* خط الصفحة النشطة: أوضح، وبتدرّج الهوية نفسه في كل مكان */
+nav a.nav-trigger[aria-current="page"]::after {
+  inset-inline: 14px;
+  bottom: 2px;
+  height: 2.5px;
+  background: linear-gradient(90deg, #994c9c, #3bc5f3 55%, #ffcc05);
+}
+
+/* سهم الانسدال أهدأ من النص، ويتلوّن معه */
+.nav-trigger .chev {
+  opacity: 0.55;
+}
+.nav-trigger:hover .chev,
+.nav-item.open .nav-trigger .chev {
+  opacity: 1;
+}
+
+/* زر البحث: شبح هادئ لا يزاحم نداء العمل */
+header[data-header] .search-fab {
+  background: #fff;
+  border: 1px solid #e6dee5;
+  color: #6d6470;
+}
+header[data-header] .search-fab .kbd {
+  /* ‎#8b8090‎ على ‎#f4f1f3‎ = 3.35:1؛ الاختصار معلومة لا زينة */
+  background: #f1eef0;
+  color: #5f5663;
+  border: 0;
+}
+
+/* ══════════════════════════════════════════════════════════
+   رفاق النجاح على الجوال
+   البطاقة كانت ثابتة عند 128px والفجوة 32px، وحاوية شاشة 320px
+   عرضها 256px — فبطاقتان تحتاجان 288px ولا تتّسعان، فتنزل كل
+   واحدة في سطر. الأساس المرن يجعل الصفّ يقرّر بنفسه: ثلاثًا على
+   الهاتف المعتاد واثنتين على الضيّق، بلا نقطة انكسار مفروضة.
+   القاعدة على الأبناء المباشرين فقط حتى لا تمسّ الشريط المتحرك
+   (يظهر عند تجاوز خمسة شركاء) الذي مساره بعرض المحتوى.
+   ══════════════════════════════════════════════════════════ */
+/* اللوح أيضًا: خمس بطاقات بمقاس ثابت تحتاج 832px داخل حاوية 640px */
+@media (max-width: 1023.98px) {
+  .wj-partners-row {
+    gap: 0.75rem;
+  }
+  @media (min-width: 640px) {
+    .wj-partners-row {
+      gap: 1.25rem;
+    }
+  }
+
+  .wj-partners-row > .wj-partner {
+    flex: 1 1 5.5rem;
+    width: auto;
+    max-width: 8rem;
+    min-width: 4.25rem;
+    height: 4rem;
+    padding-inline: 0.5rem;
+  }
+
+  .wj-partners-row > .wj-partner span {
+    font-size: 12px;
+    line-height: 1.35;
+    text-align: center;
+  }
+
+  .wj-partners-row > .wj-partner img {
+    height: 2.25rem;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════
+   توازن أسطر العناوين
+   عنوان «حكايتنا تبدأ من شغف وتنمو بالمعرفة» كان يترك «بالمعرفة»
+   وحدها في سطر ثانٍ — كلمة يتيمة، وهي الملوّنة فتبدو معلّقة.
+   ‏balance‎ يوزّع الكلمات على الأسطر بالتساوي بدل ملء الأول ورمي
+   الباقي. المتصفحات القديمة تتجاهل السطر فتبقى كما كانت.
+   ══════════════════════════════════════════════════════════ */
+h1,
+h2,
+h3,
+.lead h1,
+.wj-prose h2,
+.wj-prose h3 {
+  text-wrap: balance;
+}
+
+/* الفقرات القصيرة تستفيد من ‎pretty‎ (يمنع الكلمة اليتيمة في آخر سطر) */
+.wj-prose p,
+section > p,
+.lead p {
+  text-wrap: pretty;
+}
+
+/* ══════════════════════════════════════════════════════════
+   بنود القائمة العليا لا تنكسر سطرين
+   «المركز الإعلامي» أطول بند، وكان ينكسر إلى سطرين عند العروض
+   بين 1024 و1180 حيث القائمة مزدحمة. المنع يبقيه سطرًا واحدًا.
+   ══════════════════════════════════════════════════════════ */
+.nav-trigger {
+  white-space: nowrap;
+}
+.wj-sheet__body > a,
+.m-acc__btn {
+  white-space: nowrap;
+}
+
+/* ══════════════════════════════════════════════════════════
+   رفاق النجاح — عرض شعارات مميّز: صفّان متعاكسان، بطاقات بعمق،
+   تلوين وارتفاع عند المرور. بديل الصفّ الرمادي الباهت.
+   ══════════════════════════════════════════════════════════ */
+.wj-logos {
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+  overflow: hidden;
+  padding: 10px 0;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+}
+.wj-logos__row {
+  display: flex;
+  gap: 1.15rem;
+  width: max-content;
+  will-change: transform;
+}
+.wj-logos__row--a {
+  animation: wj-logos-a 48s linear infinite;
+}
+.wj-logos__row--b {
+  animation: wj-logos-b 60s linear infinite;
+}
+.wj-logos:hover .wj-logos__row,
+.wj-logos__row:focus-within {
+  animation-play-state: paused;
+}
+
+@keyframes wj-logos-a {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+@keyframes wj-logos-b {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.wj-logo {
+  flex: 0 0 auto;
+  height: 92px;
+  min-width: 172px;
+  padding: 0 1.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border: 1px solid #efe9ee;
+  border-radius: 18px;
+  box-shadow: 0 4px 20px rgba(60, 19, 64, 0.055);
+  transition:
+    transform var(--wj-d2) var(--wj-e-out),
+    box-shadow var(--wj-d2) var(--wj-e-out),
+    border-color var(--wj-d2) var(--wj-e-out);
+}
+.wj-logo img {
+  max-height: 54px;
+  width: auto;
+  object-fit: contain;
+  filter: grayscale(0.35);
+  opacity: 0.9;
+  transition:
+    filter var(--wj-d3) var(--wj-e-out),
+    opacity var(--wj-d3) var(--wj-e-out),
+    transform var(--wj-d2) var(--wj-e-out);
+}
+.wj-logo .wj-logo-name {
+  font-family: var(--wj-font);
+  font-weight: 700;
+  font-size: 15px;
+  color: #6d6470;
+  white-space: nowrap;
+}
+.wj-logo:hover {
+  transform: translateY(-7px);
+  box-shadow: 0 16px 38px rgba(60, 19, 64, 0.15);
+  border-color: rgba(153, 76, 156, 0.35);
+}
+.wj-logo:hover img {
+  filter: grayscale(0);
+  opacity: 1;
+  transform: scale(1.04);
+}
+.wj-logo:hover .wj-logo-name {
+  color: #994c9c;
+}
+
+/* لمسة: أول بطاقة في كل صفّ تحمل حدًّا علويًّا من الهوية */
+.wj-logos__row .wj-logo:nth-child(6n + 1) {
+  border-top: 3px solid #994c9c;
+}
+.wj-logos__row--b .wj-logo:nth-child(6n + 1) {
+  border-top-color: #3bc5f3;
+}
+
+@media (max-width: 640px) {
+  .wj-logo {
+    height: 78px;
+    min-width: 140px;
+    padding: 0 1.3rem;
+  }
+  .wj-logo img {
+    max-height: 42px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wj-logos__row--a,
+  .wj-logos__row--b {
+    animation: none;
+  }
+  .wj-logos {
+    -webkit-mask-image: none;
+    mask-image: none;
+    flex-wrap: wrap;
+  }
+  .wj-logos__row {
+    flex-wrap: wrap;
+    justify-content: center;
+    width: auto;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════
+   رفاق النجاح — خمس خانات تتقلّب تتابعيًا كل 3 ثوانٍ
+   ══════════════════════════════════════════════════════════ */
+.wj-partners-mount {
+}
+.wj-flips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.8rem;
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 6px 0.5rem;
+  perspective: 1200px;
+}
+.wj-flip {
+  flex: 0 0 auto;
+  width: 134px;
+  height: 90px;
+  border-radius: 16px;
+  background: #fff;
+  border: 1px solid #efe9ee;
+  box-shadow: 0 6px 22px rgba(60, 19, 64, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition:
+    box-shadow var(--wj-d2) var(--wj-ease),
+    transform var(--wj-d2) var(--wj-e-out);
+}
+.wj-flip:hover {
+  box-shadow: 0 16px 36px rgba(60, 19, 64, 0.15);
+  transform: translateY(-5px);
+}
+.wj-flip__in {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 1rem;
+  transform-origin: center;
+  transition:
+    transform 0.34s var(--wj-e-io),
+    opacity 0.34s var(--wj-e-io);
+}
+.wj-flip.is-flip .wj-flip__in {
+  transform: rotateX(90deg);
+  opacity: 0;
+}
+.wj-flip img {
+  max-height: 50px;
+  max-width: 100%;
+  width: auto;
+  object-fit: contain;
+}
+.wj-flip__txt {
+  font-weight: 700;
+  color: #6d6470;
+  font-size: 0.92rem;
+  text-align: center;
+  line-height: 1.3;
+}
+@media (max-width: 1023px) {
+  .wj-flip {
+    width: 132px;
+    height: 86px;
+  }
+  .wj-flip img {
+    max-height: 46px;
+  }
+}
+@media (max-width: 639px) {
+  .wj-flip {
+    width: 30%;
+    max-width: 130px;
+    height: 78px;
+  }
+  .wj-flip img {
+    max-height: 40px;
+  }
+  .wj-flips {
+    gap: 0.55rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wj-flip.is-flip .wj-flip__in {
+    transform: none;
+    opacity: 0.35;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════
+   الرؤية · الرسالة · الأهداف — شريط عرض متحرّك دوّار
+   ══════════════════════════════════════════════════════════ */
+.wj-vmg {
+  max-width: 880px;
+  margin: 0 auto;
+}
+.wj-vmg__tabs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+.wj-vmg__tabs button {
+  padding: 0.55rem 1.6rem;
+  border-radius: 999px;
+  border: 1px solid #e6dee5;
+  background: #fff;
+  color: #6d6470;
+  font-family: var(--wj-font);
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition:
+    background var(--wj-d2) var(--wj-ease),
+    color var(--wj-d2) var(--wj-ease),
+    border-color var(--wj-d2) var(--wj-ease);
+}
+.wj-vmg__tabs button:hover {
+  border-color: #994c9c;
+  color: #994c9c;
+}
+.wj-vmg__tabs button.on {
+  background: #994c9c;
+  color: #fff;
+  border-color: #994c9c;
+}
+.wj-vmg__stage {
+  position: relative;
+  min-height: 300px;
+  transition: height var(--wj-d3) var(--wj-e-io);
+}
+.wj-vmg__panel {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 1.5rem 1rem;
+  opacity: 0;
+  transform: translateY(18px);
+  pointer-events: none;
+  transition:
+    opacity var(--wj-d3) var(--wj-e-out),
+    transform var(--wj-d3) var(--wj-e-out);
+}
+.wj-vmg__panel.on {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+.wj-vmg__ic {
+  width: 76px;
+  height: 76px;
+  border-radius: 22px;
+  margin-bottom: 1.25rem;
+  background: linear-gradient(135deg, #994c9c, #7d3e81);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 10px 28px rgba(153, 76, 156, 0.28);
+}
+.wj-vmg__ic .material-symbols-outlined {
+  font-size: 38px;
+}
+.wj-vmg__title {
+  font-size: 1.7rem;
+  font-weight: 800;
+  color: #994c9c;
+  margin-bottom: 0.8rem;
+}
+.wj-vmg__body {
+  font-size: 1.15rem;
+  color: #4d444e;
+  line-height: 1.85;
+  max-width: 640px;
+}
+.wj-vmg__goals {
+  list-style: none;
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  text-align: start;
+}
+.wj-vmg__goals li {
+  position: relative;
+  padding-inline-start: 1.6rem;
+  font-size: 1.08rem;
+  color: #4d444e;
+  line-height: 1.7;
+}
+.wj-vmg__goals li::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  top: 0.62em;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: #994c9c;
+}
+.wj-vmg__dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1.75rem;
+}
+.wj-vmg__dots i {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: #d0c2cf;
+  cursor: pointer;
+  transition:
+    width var(--wj-d2) var(--wj-ease),
+    background var(--wj-d2) var(--wj-ease);
+}
+.wj-vmg__dots i.on {
+  width: 28px;
+  background: #994c9c;
+}
+@media (max-width: 767px) {
+  .wj-vmg__stage {
+    min-height: 340px;
+  }
+  .wj-vmg__title {
+    font-size: 1.45rem;
+  }
+  .wj-vmg__body,
+  .wj-vmg__goals li {
+    font-size: 1rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wj-vmg__panel {
+    transition: opacity var(--wj-d1) linear;
+    transform: none;
+  }
+}
+
+/* رسوم وهج المنقوشة (المواضع الكبيرة) */
+.wj-eng {
+  display: inline-block;
+  object-fit: contain;
+  vertical-align: middle;
+  max-width: 100%;
+}
+
+/* بلاطة الأيقونة المنقوشة: خلفية فاتحة دافئة بدل التدرّج البنفسجي،
+   فيظهر النقش الخمري التفصيلي بوضوح وفخامة (كفقاعة بطل البرنامج). */
+.wj-eng-tile {
+  background: #fbf6f9 !important;
+  background-image: none !important;
+  border: 1px solid #efe1ea !important;
+  box-shadow: 0 8px 22px rgba(60, 19, 64, 0.1) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: #b03269 !important;
+  -webkit-text-fill-color: initial !important;
+  /* حشوة موحّدة صفر: النقش نفسه يحمل فراغه الداخلي، والحشوة الموروثة كانت تقصّه */
+  padding: 0 !important;
+}
+.wj-eng-tile .wj-eng {
+  width: auto;
+}
+
+/* ══════════════════════════════════════════════════════════
+   الرئيسية المبهرة — سينمائية منضبطة على رموز الحركة
+   ══════════════════════════════════════════════════════════ */
+
+/* ١) الترحيب: تقريب كين-بيرنز بطيء لخلفية المكتبة */
+@keyframes wjKenburns {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.09) translateY(-12px);
+  }
+}
+.wj-kenburns {
+  animation: wjKenburns 26s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+/* دخول متدرّج لعناصر الترحيب (العنوان ثم الوصف ثم الزر) */
+@keyframes wjHeroUp {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.wj-hero-stage > * {
+  opacity: 0;
+  transform: translateY(28px);
+  animation: wjHeroUp var(--wj-d4) var(--wj-e-out) forwards;
+}
+.wj-hero-stage > *:nth-child(1) {
+  animation-delay: 0.12s;
+}
+.wj-hero-stage > *:nth-child(2) {
+  animation-delay: 0.32s;
+}
+.wj-hero-stage > *:nth-child(3) {
+  animation-delay: 0.52s;
+}
+/* دخول الأطفال هو العرض — عطّل نهضة القسم المزدوجة */
+.wj-hero.wj-rise {
+  animation: none;
+  opacity: 1;
+  transform: none;
+}
+
+/* مؤشّر تمرير هادئ أسفل الترحيب */
+.wj-scroll-cue {
+  position: absolute;
+  bottom: 18px;
+  inset-inline: 0;
+  display: flex;
+  justify-content: center;
+  z-index: 10;
+  opacity: 0;
+  animation: wjHeroUp var(--wj-d3) var(--wj-e-out) 0.95s forwards;
+}
+@keyframes wjCueBob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(7px);
+  }
+}
+.wj-scroll-cue .material-symbols-outlined,
+.wj-scroll-cue [data-wj-icon] {
+  color: #994c9c;
+  opacity: 0.75;
+  animation: wjCueBob 1.9s ease-in-out infinite;
+}
+
+/* ٢) النقوش تنبض عند التحويم على بطاقتها */
+.wj-eng-tile {
+  transition:
+    transform var(--wj-d2) var(--wj-e-out),
+    box-shadow var(--wj-d2) var(--wj-e-out);
+}
+div:has(> .wj-eng-tile):hover > .wj-eng-tile,
+a:has(.wj-eng-tile):hover .wj-eng-tile {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 16px 34px rgba(60, 19, 64, 0.18) !important;
+}
+.wj-eng-tile .wj-eng {
+  transition: transform var(--wj-d3) var(--wj-e-spring);
+}
+div:has(> .wj-eng-tile):hover .wj-eng,
+a:has(.wj-eng-tile):hover .wj-eng {
+  transform: scale(1.1) rotate(-2deg);
+}
+
+/* ٣) أرقام الحصاد: تتوالى قافزةً عند بلوغها */
+.wj-reveal #harvest-grid > div {
+  opacity: 0;
+  transform: translateY(18px) scale(0.94);
+  transition:
+    opacity var(--wj-d3) var(--wj-e-out),
+    transform var(--wj-d3) var(--wj-e-spring);
+}
+.wj-reveal.wj-in #harvest-grid > div {
+  opacity: 1;
+  transform: none;
+}
+.wj-reveal.wj-in #harvest-grid > div:nth-child(2) {
+  transition-delay: 70ms;
+}
+.wj-reveal.wj-in #harvest-grid > div:nth-child(3) {
+  transition-delay: 140ms;
+}
+.wj-reveal.wj-in #harvest-grid > div:nth-child(4) {
+  transition-delay: 210ms;
+}
+.wj-reveal.wj-in #harvest-grid > div:nth-child(5) {
+  transition-delay: 280ms;
+}
+.wj-reveal.wj-in #harvest-grid > div:nth-child(6) {
+  transition-delay: 350ms;
+}
+.wj-reveal.wj-in #harvest-grid > div:nth-child(7) {
+  transition-delay: 420ms;
+}
+.wj-reveal.wj-in #harvest-grid > div:nth-child(8) {
+  transition-delay: 490ms;
+}
+
+/* ٤) بطاقات الأخبار تتوالى */
+#home-news.wj-reveal .grid > a {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity var(--wj-d3) var(--wj-e-out),
+    transform var(--wj-d3) var(--wj-e-out);
+}
+#home-news.wj-reveal.wj-in .grid > a {
+  opacity: 1;
+  transform: none;
+}
+#home-news.wj-reveal.wj-in .grid > a:nth-child(2) {
+  transition-delay: 110ms;
+}
+#home-news.wj-reveal.wj-in .grid > a:nth-child(3) {
+  transition-delay: 220ms;
+}
+
+/* ٥) فعاليات الروزنامة تنزلق تباعًا */
+#agenda.wj-reveal .flex.flex-col > * {
+  opacity: 0;
+  transform: translateX(-22px);
+  transition:
+    opacity var(--wj-d3) var(--wj-e-out),
+    transform var(--wj-d3) var(--wj-e-out);
+}
+#agenda.wj-reveal.wj-in .flex.flex-col > * {
+  opacity: 1;
+  transform: none;
+}
+#agenda.wj-reveal.wj-in .flex.flex-col > *:nth-child(2) {
+  transition-delay: 100ms;
+}
+#agenda.wj-reveal.wj-in .flex.flex-col > *:nth-child(3) {
+  transition-delay: 200ms;
+}
+
+/* احترام تفضيل تقليل الحركة — كل شيء يظهر ثابتًا */
+@media (prefers-reduced-motion: reduce) {
+  .wj-kenburns,
+  .wj-scroll-cue .material-symbols-outlined,
+  .wj-scroll-cue [data-wj-icon] {
+    animation: none;
+  }
+  .wj-hero-stage > *,
+  .wj-scroll-cue {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+  .wj-reveal #harvest-grid > div,
+  #home-news.wj-reveal .grid > a,
+  #agenda.wj-reveal .flex.flex-col > * {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .wj-eng-tile,
+  .wj-eng-tile .wj-eng {
+    transition: none;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════
+   تناسق الجوال — طبقة موحّدة (أيلول 2026)
+   إصلاحات عرضٍ فقط، لا يتغيّر أي محتوى.
+   !important مقصودة: ستايل Tailwind CDN يُحقن بعد هذا الملف.
+   ══════════════════════════════════════════════════════════ */
+
+/* ١) هيرو الرئيسية: بلا فراغ ميت تحت الزر، وقسم «عن وهج» يطلّ من أسفل الشاشة */
+@media (max-width: 767px) {
+  .wj-hero {
+    min-height: 74vh !important;
+    min-height: 74svh !important;
+  }
+  .wj-scroll-cue {
+    bottom: 12px;
+  }
+}
+
+/* ٢) البطاقة الفردية الأخيرة في شبكات عمودين تمتد بعرض الصف —
+   لا بطاقة «يتيمة» بجوار فراغ (أرقام وهج، مبادرات المسارات) */
+@media (max-width: 639px) {
+  #harvest-grid > div:nth-child(odd):last-child,
+  [class*="lg:grid-cols-5"] > .init-card:nth-child(odd):last-child {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ٣) تبويبات المركز الإعلامي: شبكة ٢×٢ متساوية بدل سطرٍ ينكسر */
+@media (max-width: 639px) {
+  .tab-btn {
+    width: calc(50% - 0.25rem);
+    justify-content: center;
+    padding: 0.7rem 0.4rem !important;
+    font-size: 0.84rem !important;
+  }
+  .tab-btn .material-symbols-outlined {
+    font-size: 18px !important;
+  }
+  .tab-btn img.wj-eng {
+    width: 20px !important;
+    height: 20px !important;
+  }
+}
+
+/* ٤) بطاقات الرؤية/الرسالة/الأهداف في الرئيسية: كثافة جوال مريحة
+   بدل صناديق منفوخة الهواء */
+@media (max-width: 639px) {
+  #about .grid {
+    gap: 0.8rem !important;
+  }
+  #about .grid > div {
+    padding: 1.15rem 1rem !important;
+  }
+  #about .grid > div > div:first-child {
+    width: 52px !important;
+    height: 52px !important;
+    margin-bottom: 0.7rem !important;
+    border-radius: 14px !important;
+  }
+  #about .grid > div > div:first-child .material-symbols-outlined {
+    font-size: 24px !important;
+  }
+  #about .grid > div > div:first-child img {
+    width: 27px !important;
+    height: 27px !important;
+  }
+  #about .grid > div h3 {
+    margin-bottom: 0.45rem !important;
+  }
+}
+
+/* ٥) بلاطات إدارات الهيكل التنظيمي: ارتفاع موحّد لكل صف */
+@media (max-width: 639px) {
+  .wj-org-node.dept {
+    min-height: 72px;
+    justify-content: center;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════
+   «وهج في أرقام» — شبكة على عرض القسم بعد حذف الصورة
+   سبع بطاقات: الأولى (الأكبر أثرًا) تشغل خانتين ⇒ صفّان متساويان
+   ══════════════════════════════════════════════════════════ */
+@media (min-width: 768px) {
+  #harvest-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+  #harvest-grid > div:first-child {
+    grid-column: span 2;
+  }
+  #harvest-grid > div {
+    padding: 1.5rem 1rem !important;
+  }
+}
+@media (min-width: 1024px) {
+}
+
+/* ══════════════════════════════════════════════════════════
+   بطاقات «وهج في أرقام» — أيقونة الهوية أعلاها، ثم الرقم يمينًا
+   يليه وصفه على سطر واحد؛ الأولى (الأكبر أثرًا) تشغل خانتين.
+   ══════════════════════════════════════════════════════════ */
+.wj-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  align-items: center;
+  text-align: center;
+}
+.wj-stat .wj-stat__row {
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+}
+.wj-stat__t {
+  display: block;
+}
+.wj-stat__ic {
+  width: 44px;
+  height: 44px;
+  border-radius: 13px;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.14);
+}
+.wj-stat__ic .material-symbols-outlined {
+  font-size: 26px;
+  color: #ffcc05;
+  font-variation-settings:
+    "FILL" 0,
+    "wght" 300;
+}
+.wj-stat__ic img {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+}
+.wj-stat__row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.55rem;
+  flex-wrap: wrap;
+}
+.wj-stat__n {
+  font-size: 1.9rem;
+  font-weight: 800;
+  line-height: 1;
+  color: #ffcc05;
+  letter-spacing: -0.01em;
+}
+.wj-stat__t {
+  font-size: 0.9rem;
+  color: #f7d2ff;
+  line-height: 1.35;
+}
+@media (min-width: 768px) {
+  .wj-stat__ic {
+    width: 52px;
+    height: 52px;
+    border-radius: 15px;
+  }
+  .wj-stat__ic .material-symbols-outlined {
+    font-size: 28px;
+  }
+  .wj-stat__ic img {
+    width: 30px;
+    height: 30px;
+  }
+  .wj-stat__n {
+    font-size: 2.4rem;
+  }
+  .wj-stat__t {
+    font-size: 1rem;
+  }
+  #harvest-grid > div:first-child .wj-stat__n {
+    font-size: 3.2rem;
+  }
+  #harvest-grid > div:first-child .wj-stat__ic {
+    width: 60px;
+    height: 60px;
+  }
+}
+@media (min-width: 1024px) {
+  .wj-stat__n {
+    font-size: 2.7rem;
+  }
+  #harvest-grid > div:first-child .wj-stat__n {
+    font-size: 3.75rem;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════
+   بطاقات «فصول وهج» — غلاف الفصل الحقيقي + العنوان والمجال
+   ══════════════════════════════════════════════════════════ */
+.wj-ch__cover {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: #f2eef3;
+}
+.wj-ch__cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 38%;
+  transition: transform 0.6s var(--wj-ease, cubic-bezier(0.22, 0.61, 0.36, 1));
+}
+.wj-ch:hover .wj-ch__cover img {
+  transform: scale(1.05);
+}
+.wj-ch__no {
+  position: absolute;
+  inset-block-start: 8px;
+  inset-inline-start: 8px;
+  background: rgba(255, 255, 255, 0.92);
+  color: #6b5f6b;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+.wj-ch__body {
+  padding: 12px 13px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  flex-grow: 1;
+}
+.wj-ch__ttl {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1d1a1d;
+  line-height: 1.35;
+}
+.wj-ch__row {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  font-size: 12.5px;
+  line-height: 1.45;
+}
+.wj-ch__k {
+  color: #994c9c;
+  font-weight: 600;
+  flex: 0 0 auto;
+}
+.wj-ch__k::after {
+  content: ":";
+}
+.wj-ch__v {
+  color: #57505a;
+  overflow-wrap: anywhere;
+}
+.wj-ch__cta {
+  margin-top: auto;
+  padding-top: 6px;
+  color: #994c9c;
+  font-size: 13px;
+  font-weight: 600;
+}
+@media (min-width: 1024px) {
+  .wj-ch__body {
+    padding: 14px 16px 16px;
+  }
+  .wj-ch__ttl {
+    font-size: 17px;
+  }
+  .wj-ch__row {
+    font-size: 13.5px;
+  }
+}
+
+/* أيقونة بطاقة الرقم: نقش أبيض شفاف على البنفسجي (بلا بلاطة كريمية) */
+.wj-stat__ic {
+  background: rgba(255, 255, 255, 0.13) !important;
+  padding: 0 !important;
+}
+.wj-stat__ic img {
+  filter: brightness(0) invert(1);
+  opacity: 0.95;
+}
+.wj-stat__ic .material-symbols-outlined {
+  color: #ffcc05 !important;
+}
+
+/* ══════════════════════════════════════════════════════════
+   بطاقات المنصة: الأيقونة وجنبها العنوان على سطر، والوصف تحتهما
+   ══════════════════════════════════════════════════════════ */
+.wj-ih {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  column-gap: 0.8rem;
+  row-gap: 0.5rem;
+}
+.wj-ih > *:nth-child(1) {
+  grid-column: 1;
+  grid-row: 1;
+  margin-bottom: 0 !important;
+}
+.wj-ih > h3,
+.wj-ih > h4 {
+  grid-column: 2;
+  grid-row: 1;
+  margin-bottom: 0 !important;
+}
+.wj-ih > *:nth-child(n + 3) {
+  grid-column: 1 / -1;
+}
+.wj-ih > .wj-eng-tile,
+.wj-ih > *:nth-child(1) {
+  flex: 0 0 auto;
+}
+
+/* الأيقونات الباهتة داخل البطاقات: تباين أوضح */
+.wj-ih > *:nth-child(1) {
+  background: rgba(153, 76, 156, 0.1) !important;
+}
+.wj-ih > *:nth-child(1).wj-eng-tile {
+  background: #fbf6f9 !important;
+}
+
+/* شارة «قريبًا» على الأقسام غير المتاحة بعد */
+.wj-soon {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: #fdf5dc;
+  color: #8a6d00;
+  border: 1px solid #f2dd9a;
+  font-size: 12.5px;
+  font-weight: 700;
+  padding: 3px 12px;
+  border-radius: 999px;
+  vertical-align: middle;
+  margin-inline-start: 8px;
+}
+.wj-soon-dim {
+  opacity: 0.55;
+  pointer-events: none;
+  filter: saturate(0.5);
+}
+/* مفتاح اللوحة يضيف hidden، و«display» أعلاه يتغلّب على قاعدة المتصفح — فنصرّح بالإخفاء */
+.wj-soon[hidden],
+.wj-soon-sm[hidden] {
+  display: none !important;
+}
+
+/* زر تحميل ملف المقال + شارة السلسلة على البطاقة */
+.wj-dl {
+  margin: 26px 0 6px;
+}
+.wj-dl a {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  background: #994c9c;
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 15px;
+  text-decoration: none;
+  box-shadow: 0 4px 14px rgba(153, 76, 156, 0.28);
+  transition:
+    background 0.2s,
+    transform 0.2s;
+}
+.wj-dl a:hover {
+  background: #7f3d82;
+  transform: translateY(-1px);
+}
+.wj-dl .material-symbols-outlined {
+  font-size: 20px;
+}
+.wj-serie {
+  position: absolute;
+  inset-block-start: 8px;
+  inset-inline-end: 8px;
+  background: rgba(153, 76, 156, 0.94);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 999px;
+  max-width: 72%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* شارة «قريبًا» المصغّرة داخل القوائم والروابط */
+.wj-soon-sm {
+  display: inline-block;
+  font-style: normal;
+  background: #fdf5dc;
+  color: #8a6d00;
+  border: 1px solid #f2dd9a;
+  font-size: 10.5px;
+  font-weight: 700;
+  line-height: 1;
+  padding: 3px 7px;
+  border-radius: 999px;
+  margin-inline-start: 6px;
+  vertical-align: middle;
+}
+
+/* ══════════════════════════════════════════════════════════
+   نافذة عرض الملف (PDF) — تفتح داخل الموقع بلا مغادرة الصفحة
+   ══════════════════════════════════════════════════════════ */
+.wj-pdf-ov {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  background: rgba(29, 26, 29, 0.78);
+  backdrop-filter: blur(3px);
+  display: flex;
+  flex-direction: column;
+  padding: clamp(8px, 2.5vw, 28px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.28s ease;
+}
+.wj-pdf-ov.on {
+  opacity: 1;
+  pointer-events: auto;
+}
+.wj-pdf-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  color: #fff;
+  margin-bottom: 10px;
+}
+.wj-pdf-bar b {
+  font-size: 15px;
+  font-weight: 700;
+  margin-inline-end: auto;
+}
+.wj-pdf-bar a,
+.wj-pdf-bar button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+  border: 0;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+.wj-pdf-bar a:hover,
+.wj-pdf-bar button:hover {
+  background: rgba(255, 255, 255, 0.26);
+}
+.wj-pdf-ov iframe {
+  flex: 1;
+  width: 100%;
+  border: 0;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.45);
+}
+@media (prefers-reduced-motion: reduce) {
+  .wj-pdf-ov {
+    transition: none;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════
+   بطاقة السلسلة — «سلسلة | ما يبقى»: تعريفها ثم أعدادها
+   ══════════════════════════════════════════════════════════ */
+.wj-serie-card {
+  background: #fff;
+  border: 1px solid #ece6ea;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 2px 14px rgba(29, 26, 29, 0.05);
+}
+.wj-serie__head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 20px;
+  background: linear-gradient(135deg, #f7f1f7, #fdfbfd);
+  border-bottom: 1px solid #f0eaef;
+}
+.wj-serie__ic {
+  width: 52px;
+  height: 52px;
+  border-radius: 15px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  background: #994c9c;
+}
+.wj-serie__ic .material-symbols-outlined {
+  color: #ffcc05;
+  font-size: 27px;
+}
+.wj-serie__name {
+  font-size: 19px;
+  font-weight: 800;
+  color: #1d1a1d;
+  line-height: 1.3;
+}
+.wj-serie__sep {
+  color: #c9a0cb;
+  font-weight: 400;
+  margin: 0 2px;
+}
+.wj-serie__desc {
+  font-size: 13.5px;
+  color: #6b5f6b;
+  line-height: 1.6;
+  margin-top: 3px;
+}
+.wj-serie__count {
+  margin-inline-start: auto;
+  flex: 0 0 auto;
+  background: #994c9c;
+  color: #fff;
+  font-weight: 800;
+  font-size: 14px;
+  min-width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  padding: 0 10px;
+}
+.wj-serie__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.wj-serie__row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  border-top: 1px solid #f4eff3;
+}
+.wj-serie__row:first-child {
+  border-top: 0;
+}
+.wj-serie__no {
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  flex: 0 0 auto;
+  background: #f7f1f7;
+  color: #994c9c;
+  font-weight: 800;
+  font-size: 13px;
+  display: grid;
+  place-items: center;
+}
+.wj-serie__meta {
+  min-width: 0;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.wj-serie__ttl {
+  font-size: 15.5px;
+  font-weight: 700;
+  color: #1d1a1d;
+}
+.wj-serie__ttl:hover {
+  color: #994c9c;
+}
+.wj-serie__ex {
+  font-size: 12.5px;
+  color: #7b707b;
+  line-height: 1.5;
+}
+.wj-serie__acts {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+}
+.wj-serie__read,
+.wj-serie__pdf {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 7px 13px;
+  border-radius: 999px;
+  border: 1px solid #e6dce6;
+  background: #fff;
+  color: #994c9c;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+.wj-serie__read:hover,
+.wj-serie__pdf:hover {
+  background: #f7f1f7;
+  border-color: #d9c6da;
+}
+/* شارة السلسلة فوق غلاف المقال */
+.wj-serie {
+  position: absolute;
+  inset-block-start: 8px;
+  inset-inline-end: 8px;
+  background: #994c9c;
+  color: #fff;
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 999px;
+}
+@media (max-width: 639px) {
+  .wj-serie__row {
+    flex-wrap: wrap;
+  }
+  .wj-serie__acts {
+    width: 100%;
+    padding-inline-start: 42px;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════
+   سلاسل وهج — بطاقات أسفل قسم المقالات، وصفحة لكل سلسلة
+   ══════════════════════════════════════════════════════════ */
+.wj-sc-head {
+  text-align: center;
+  margin-bottom: 18px;
+}
+.wj-sc-head h3 {
+  font-size: 22px;
+  font-weight: 800;
+  color: #994c9c;
+}
+.wj-sc-head p {
+  font-size: 13.5px;
+  color: #6b5f6b;
+  margin-top: 4px;
+}
+.wj-sc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+  gap: 16px;
+}
+.wj-sc {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  background: #fff;
+  border: 1px solid #ece6ea;
+  border-radius: 18px;
+  padding: 16px;
+  box-shadow: 0 2px 12px rgba(29, 26, 29, 0.05);
+  transition:
+    box-shadow 0.25s ease,
+    transform 0.25s ease,
+    border-color 0.25s ease;
+}
+.wj-sc:hover {
+  box-shadow: 0 12px 30px rgba(29, 26, 29, 0.1);
+  transform: translateY(-2px);
+  border-color: #ddc9de;
+}
+.wj-sc__cover {
+  flex: 0 0 auto;
+  width: 72px;
+  height: 96px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #f2eef3;
+}
+.wj-sc__cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.wj-sc__ic {
+  flex: 0 0 auto;
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  background: #994c9c;
+}
+.wj-sc__ic .material-symbols-outlined {
+  color: #ffcc05;
+  font-size: 28px;
+}
+.wj-sc__body {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.wj-sc__owner {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #b07fb2;
+  letter-spacing: 0.01em;
+}
+.wj-sc__name {
+  font-size: 17px;
+  font-weight: 800;
+  color: #1d1a1d;
+  line-height: 1.35;
+}
+.wj-sc__desc {
+  font-size: 13px;
+  color: #6b5f6b;
+  line-height: 1.6;
+}
+.wj-sc__foot {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+  font-size: 12.5px;
+  color: #7b707b;
+  font-weight: 600;
+}
+.wj-sc__go {
+  margin-inline-start: auto;
+  color: #994c9c;
+}
+.wj-sp__owner {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #b07fb2;
+  margin-bottom: 10px;
+}
+.wj-prose p.wj-sp__desc {
+  font-size: 1.05rem;
+  line-height: 1.9;
+  color: #4d444e;
+  margin: 0 0 1.5rem;
+  max-width: 46rem;
+}
+.wj-sp__list {
+  border: 1px solid #ece6ea;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #fff;
+}
+
+/* ══════════════════════════════════════════════════════════
+   رأس بغلاف مصغّر — صفحة السلسلة وأي غلاف طولي (ملصق)
+   كان الملصق يُقصّ إلى شريط 16:8 بعرض الصفحة فيتضخّم وتنقطع نصوصه.
+   ══════════════════════════════════════════════════════════ */
+.wj-sph {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 2.5rem;
+  align-items: center;
+}
+.wj-sph__txt {
+  min-width: 0;
+}
+.wj-sph__cover {
+  margin: 0;
+  width: 12.5rem;
+  border-radius: 1rem;
+  overflow: hidden;
+  background: #f2eef3;
+  box-shadow:
+    0 1px 2px rgba(29, 26, 29, 0.06),
+    0 14px 30px -14px rgba(29, 26, 29, 0.34);
+}
+.wj-sph__cover--wide {
+  width: 20rem;
+}
+.wj-sph__cover img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+@media (max-width: 639px) {
+  .wj-sph {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  .wj-sph__cover {
+    width: 9.5rem;
+  }
+  .wj-sph__cover--wide {
+    width: 100%;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════
+   أعداد السلسلة بطاقات — بعرض الصفحة لا بعرض عمود القراءة
+   المحدِّدات مزدوجة لتتغلّب على قواعد .wj-prose (h3 · p · a · img)
+   ══════════════════════════════════════════════════════════ */
+.wj-prose--wide {
+  max-width: none;
+}
+.wj-prose .wj-spg {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15.5rem, 1fr));
+  gap: 1.25rem;
+  margin: 0 0 0.5rem;
+}
+.wj-spg .wj-spc {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid #ece6ea;
+  border-radius: 1.1rem;
+  overflow: hidden;
+  box-shadow:
+    0 1px 2px rgba(29, 26, 29, 0.04),
+    0 10px 26px -18px rgba(29, 26, 29, 0.22);
+  transition:
+    transform var(--wj-d2) var(--wj-ease),
+    box-shadow var(--wj-d2) var(--wj-ease);
+}
+.wj-spg .wj-spc:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    0 2px 4px rgba(29, 26, 29, 0.05),
+    0 18px 34px -18px rgba(153, 76, 156, 0.38);
+}
+.wj-spg .wj-spc__cover {
+  position: relative;
+  display: block;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: #f2eef3;
+}
+.wj-spg .wj-spc__cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+  border-radius: 0;
+  transition: transform var(--wj-d3) var(--wj-ease);
+}
+.wj-spg .wj-spc:hover .wj-spc__cover img {
+  transform: scale(1.04);
+}
+.wj-spg .wj-spc__no {
+  position: absolute;
+  inset-block-start: 10px;
+  inset-inline-start: 10px;
+  background: rgba(255, 255, 255, 0.94);
+  color: #7d3e81;
+  font-size: 12px;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+.wj-spg .wj-spc__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem 1.1rem 1.1rem;
+  flex-grow: 1;
+}
+.wj-prose .wj-spg .wj-spc__ttl {
+  font-size: 1.08rem;
+  font-weight: 800;
+  line-height: 1.45;
+  margin: 0;
+  color: #1d1a1d;
+}
+.wj-prose .wj-spg .wj-spc__ttl a {
+  color: inherit;
+  text-decoration: none;
+}
+.wj-prose .wj-spg .wj-spc__ttl a:hover {
+  color: #994c9c;
+}
+.wj-prose .wj-spg .wj-spc__ex {
+  font-size: 0.9rem;
+  line-height: 1.75;
+  color: #6b5f6b;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.wj-spg .wj-spc__acts {
+  margin-top: auto;
+  padding-top: 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.wj-prose .wj-spg .wj-spc__read {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #994c9c;
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+.wj-spg .wj-spc__read .material-symbols-outlined {
+  font-size: 18px;
+  transition: transform var(--wj-d1) var(--wj-ease);
+}
+.wj-spg .wj-spc:hover .wj-spc__read .material-symbols-outlined {
+  transform: translateX(-3px);
+}
+.wj-spg .wj-spc__pdf {
+  margin-inline-start: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border: 1px solid #e6dce6;
+  background: #fff;
+  color: #6b4a6d;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 5px 11px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition:
+    background-color var(--wj-d1) var(--wj-ease),
+    border-color var(--wj-d1) var(--wj-ease);
+}
+.wj-spg .wj-spc__pdf:hover {
+  background: #f7f1f7;
+  border-color: #d9c6da;
+}
+.wj-spg .wj-spc__pdf .material-symbols-outlined {
+  font-size: 16px;
+}
+.wj-prose .wj-spg__empty {
+  grid-column: 1 / -1;
+  font-size: 0.95rem;
+  color: #7b707b;
+}
+@media (prefers-reduced-motion: reduce) {
+  .wj-spg .wj-spc,
+  .wj-spg .wj-spc__cover img {
+    transition: none;
+  }
+  .wj-spg .wj-spc:hover {
+    transform: none;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════
+   المسارات — أكورديون أفقي (tracks.html)
+   لوح بلون كل مسار؛ المفتوح يعرض مبادراته، والضغط على المطويّ يفتحه.
+   ══════════════════════════════════════════════════════════ */
+.wj-tacc {
+  display: flex;
+  gap: 0.75rem;
+  min-height: 33rem;
+}
+.wj-tacc__p {
+  --p-bg: #994c9c;
+  --p-ink: #fff;
+  --p-sub: rgba(255, 255, 255, 0.84);
+  --p-row: rgba(255, 255, 255, 0.11);
+  --p-row-h: rgba(255, 255, 255, 0.2);
+  --p-line: rgba(255, 255, 255, 0.16);
+  --p-accent: #ffcc05;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  flex: 1 1 0;
+  min-width: 8.5rem;
+  border-radius: 1.25rem;
+  background: var(--p-bg);
+  color: var(--p-ink);
+  display: flex;
+  flex-direction: column;
+  scroll-margin-top: 6rem;
+  transition: flex-grow var(--wj-d3) var(--wj-ease);
+}
+.wj-tacc__p.is-open {
+  flex-grow: 4.2;
+}
+.wj-tacc--secondary {
+  --p-bg: #ffcc05;
+  --p-ink: #2b2100;
+  --p-sub: rgba(43, 33, 0, 0.76);
+  --p-row: rgba(255, 255, 255, 0.42);
+  --p-row-h: rgba(255, 255, 255, 0.72);
+  --p-line: rgba(115, 92, 0, 0.2);
+  --p-accent: #735c00;
+}
+.wj-tacc--tertiary {
+  --p-bg: #3d4d51;
+  --p-ink: #fff;
+  --p-sub: rgba(255, 255, 255, 0.8);
+  --p-row: rgba(255, 255, 255, 0.09);
+  --p-row-h: rgba(255, 255, 255, 0.18);
+  --p-line: rgba(255, 255, 255, 0.14);
+  --p-accent: #ffcc05;
+}
+/* الخطوط المائلة في الزاوية — من المرجع الذي اختاره المستخدم */
+.wj-tacc__stripes {
+  position: absolute;
+  z-index: -1;
+  inset-block-start: 0;
+  inset-inline-end: 0;
+  width: min(60%, 11rem);
+  height: 9rem;
+  pointer-events: none;
+  background: repeating-linear-gradient(-45deg, var(--p-line) 0 9px, transparent 9px 21px);
+  -webkit-mask-image: linear-gradient(to bottom, #000 35%, transparent);
+  mask-image: linear-gradient(to bottom, #000 35%, transparent);
+}
+.wj-tacc__tab {
+  all: unset;
+  box-sizing: border-box;
+  cursor: pointer;
+  width: 100%;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.6rem;
+  padding: 1.5rem 1.25rem;
+  color: inherit;
+  text-align: start;
+}
+.wj-tacc__tab:focus-visible {
+  outline: 3px solid var(--p-accent);
+  outline-offset: -6px;
+  border-radius: 1.25rem;
+}
+.wj-tacc__icw {
+  flex: 0 0 auto;
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: 0.9rem;
+  background: #fff;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 6px 16px -8px rgba(29, 26, 29, 0.35);
+}
+.wj-tacc__icw .material-symbols-outlined {
+  font-size: 1.9rem;
+  color: #b03269;
+}
+.wj-tacc__name {
+  font-size: 1.35rem;
+  font-weight: 800;
+  line-height: 1.3;
+}
+.wj-tacc__count {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--p-sub);
+  white-space: nowrap;
+}
+.wj-tacc__go {
+  margin-top: auto;
+  width: 2.75rem;
+  height: 2.75rem;
+  display: grid;
+  place-items: center;
+  border-radius: 0.7rem;
+  background: var(--p-row-h);
+  font-size: 1.35rem;
+  transition:
+    transform var(--wj-d1) var(--wj-ease),
+    background-color var(--wj-d1) var(--wj-ease);
+}
+.wj-tacc__p:not(.is-open):hover .wj-tacc__go {
+  transform: translateX(-4px);
+  background: var(--p-ink);
+  color: var(--p-bg);
+}
+.wj-tacc__p.is-open .wj-tacc__tab {
+  flex: 0 0 auto;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.6rem 1.75rem 0.6rem;
+  cursor: default;
+}
+.wj-tacc__p.is-open .wj-tacc__name {
+  font-size: 1.75rem;
+}
+.wj-tacc__p.is-open .wj-tacc__count {
+  margin-inline-start: auto;
+  background: var(--p-row);
+  padding: 0.25rem 0.8rem;
+  border-radius: 999px;
+}
+.wj-tacc__p.is-open .wj-tacc__go {
+  display: none;
+}
+.wj-tacc__body {
+  display: none;
+  flex-direction: column;
+  gap: 1.1rem;
+  padding: 0 1.75rem 1.75rem;
+  flex: 1 1 auto;
+}
+.wj-tacc__p.is-open .wj-tacc__body {
+  display: flex;
+  animation: wj-tacc-in var(--wj-d3) var(--wj-ease) 0.1s both;
+}
+@keyframes wj-tacc-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.wj-tacc__lead {
+  margin: 0;
+  max-width: 46rem;
+  font-size: 0.98rem;
+  line-height: 1.85;
+  color: var(--p-sub);
+}
+.wj-tacc__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+  gap: 0.6rem;
+}
+.wj-tacc__row {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 0.75rem 0.9rem;
+  border-radius: 0.9rem;
+  background: var(--p-row);
+  color: inherit;
+  text-decoration: none;
+  transition:
+    background-color var(--wj-d1) var(--wj-ease),
+    transform var(--wj-d1) var(--wj-ease);
+}
+.wj-tacc__row:hover {
+  background: var(--p-row-h);
+  transform: translateY(-2px);
+}
+.wj-tacc__row:focus-visible {
+  outline: 3px solid var(--p-accent);
+  outline-offset: 2px;
+}
+.wj-tacc__logo {
+  flex: 0 0 auto;
+  width: 2.9rem;
+  height: 2.9rem;
+  border-radius: 0.7rem;
+  background: #fff;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+.wj-tacc__logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 4px;
+  box-sizing: border-box;
+}
+.wj-tacc__logo .material-symbols-outlined {
+  color: #994c9c;
+  font-size: 1.5rem;
+}
+.wj-tacc__rt {
+  min-width: 0;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.wj-tacc__rt b {
+  font-size: 1rem;
+  font-weight: 800;
+  line-height: 1.4;
+}
+.wj-tacc__rt small {
+  font-size: 0.8rem;
+  line-height: 1.6;
+  color: var(--p-sub);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.wj-tacc__arr {
+  flex: 0 0 auto;
+  font-size: 1.2rem;
+  opacity: 0.8;
+  transition: transform var(--wj-d1) var(--wj-ease);
+}
+.wj-tacc__row:hover .wj-tacc__arr {
+  transform: translateX(-3px);
+  opacity: 1;
+}
+.wj-tacc__none {
+  font-size: 0.9rem;
+  color: var(--p-sub);
+}
+.wj-tacc__all {
+  align-self: flex-start;
+  margin-top: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0.6rem 1.15rem;
+  border-radius: 999px;
+  background: var(--p-ink);
+  color: var(--p-bg);
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform var(--wj-d1) var(--wj-ease);
+}
+.wj-tacc__all:hover {
+  transform: translateY(-2px);
+}
+.wj-tacc__all .material-symbols-outlined {
+  font-size: 1.1rem;
+}
+@media (max-width: 767px) {
+  .wj-tacc {
+    flex-direction: column;
+    min-height: 0;
+    gap: 0.6rem;
+  }
+  .wj-tacc__p {
+    flex: none;
+    min-width: 0;
+    transition: none;
+  }
+  .wj-tacc__tab {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 1.1rem 1.2rem;
+  }
+  .wj-tacc__icw {
+    width: 2.6rem;
+    height: 2.6rem;
+    border-radius: 0.75rem;
+  }
+  .wj-tacc__icw .material-symbols-outlined {
+    font-size: 1.5rem;
+  }
+  .wj-tacc__name {
+    font-size: 1.15rem;
+  }
+  .wj-tacc__count {
+    margin-inline-start: auto;
+  }
+  .wj-tacc__go,
+  .wj-tacc__p:not(.is-open):hover .wj-tacc__go {
+    margin-top: 0;
+    width: 2.25rem;
+    height: 2.25rem;
+    transform: rotate(-90deg);
+  }
+  .wj-tacc__p.is-open .wj-tacc__tab {
+    padding: 1.2rem 1.2rem 0.3rem;
+  }
+  .wj-tacc__p.is-open .wj-tacc__name {
+    font-size: 1.3rem;
+  }
+  .wj-tacc__body {
+    padding: 0 1.2rem 1.3rem;
+  }
+  .wj-tacc__list {
+    grid-template-columns: 1fr;
+  }
+  .wj-tacc__stripes {
+    height: 5rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wj-tacc__p {
+    transition: none;
+  }
+  .wj-tacc__p.is-open .wj-tacc__body {
+    animation: none;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════
+   واجهة الصفحة الرئيسية — شرائح (فيديو + صور بنص) تُدار من اللوحة:
+   تعديل الصفحات ← واجهة الصفحة الرئيسية. الحالة على .wj-hero:
+   data-hs-kind (video|image) · has-vid · is-cine · data-vid-level
+   ══════════════════════════════════════════════════════════ */
+/* شتر الهوية: بنفسجي مخفّف فوق الفيديو بدل تدرّج لون الخلفية (طلب الفريق 2026-09-30) */
+.wj-hero .wj-hero-grad {
+  background: linear-gradient(
+    to top,
+    rgba(120, 52, 124, 0.5) 0%,
+    rgba(153, 76, 156, 0.29) 44%,
+    rgba(153, 76, 156, 0.13) 76%,
+    rgba(153, 76, 156, 0.04) 100%
+  );
+}
+/* نص مخفيّ بصريًا وباقٍ لقارئ الشاشة ومحركات البحث (عنوان الواجهة h1) */
+.wj-vh {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+/* زر الواجهة في أسفل جهة البداية (اليمين)، فوق كل الشرائح ولا يتلاشى معها */
+.wj-hero .wj-hero-cta {
+  position: absolute;
+  z-index: 12;
+  display: inline-block;
+  inset-block-end: clamp(1.1rem, 3.2vh, 2.6rem);
+  inset-inline-start: clamp(1rem, 4vw, 3.5rem);
+}
+@media (max-width: 767px) {
+  .wj-hero .wj-hero-cta {
+    inset-block-end: 1.15rem;
+    inset-inline-start: 1.15rem;
+    padding: 0.62rem 1.35rem;
+    font-size: 0.92rem;
+  }
+}
+/* الشعار يتحرك حركة خفيفة مع حركة الفأرة (nav.js) */
+.wj-logo-live {
+  will-change: transform;
+} /* النعومة من حلقة nav.js لا من transition */
+@media (prefers-reduced-motion: reduce) {
+  .wj-logo-live {
+    transition: none;
+    transform: none !important;
+  }
+}
+
+.wj-hs {
+  position: absolute;
+  inset: 0;
+}
+.wj-hs__s {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity var(--wj-d4) var(--wj-ease),
+    visibility 0s linear var(--wj-d4);
+}
+.wj-hs__s.is-on {
+  opacity: 1;
+  visibility: visible;
+  transition:
+    opacity var(--wj-d4) var(--wj-ease),
+    visibility 0s;
+}
+
+/* الفيديو: يظهر بتلاشٍ حين يبدأ التشغيل فعلًا */
+.wj-hero-vid {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--wj-d4) var(--wj-ease);
+}
+.wj-hero-vid.on {
+  opacity: 0.38;
+}
+.wj-hero-vid.on[data-level="mid"] {
+  opacity: 0.62;
+}
+.wj-hero-vid.on[data-level="strong"] {
+  opacity: 0.92;
+}
+.wj-hero .wj-kenburns,
+.wj-hero .wj-hero-grad,
+.wj-hero .wj-hero-stage {
+  transition: opacity var(--wj-d4) var(--wj-ease);
+}
+.wj-hero.has-vid[data-hs-kind="video"] .wj-kenburns,
+.wj-hero[data-hs-kind="image"] .wj-kenburns {
+  opacity: 0;
+}
+.wj-hero.has-vid[data-hs-kind="video"][data-vid-level="mid"] .wj-hero-grad {
+  opacity: 0.8;
+}
+.wj-hero.has-vid[data-hs-kind="video"][data-vid-level="strong"] .wj-hero-grad {
+  opacity: 0.58;
+}
+
+/* فوق الفيديو: نص الواجهة يتلاشى بعد ثوانٍ فيظهر المقطع كاملًا، ويعود بتحريك الفأرة أو اللمس */
+.wj-hero.is-cine .wj-hero-stage {
+  opacity: 0;
+  pointer-events: none;
+}
+.wj-hero.is-cine .wj-hero-vid.on {
+  opacity: 1;
+}
+.wj-hero.is-cine .wj-hero-grad {
+  opacity: 0.22;
+}
+
+/* شريحة الصورة: الصورة بكامل وضوحها ونصّها على جانبها، ونص الواجهة يختفي */
+.wj-hero[data-hs-kind="image"] .wj-hero-grad {
+  opacity: 0;
+}
+.wj-hero[data-hs-kind="image"] .wj-hero-stage {
+  opacity: 0;
+  pointer-events: none;
+}
+.wj-hs__img img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 30%;
+}
+.wj-hs__img::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    to left,
+    rgba(74, 30, 78, 0.9) 0%,
+    rgba(96, 42, 100, 0.68) 26%,
+    rgba(129, 60, 133, 0.32) 48%,
+    rgba(153, 76, 156, 0.18) 100%
+  );
+}
+.wj-hs__img[data-side="left"]::after {
+  background: linear-gradient(
+    to right,
+    rgba(74, 30, 78, 0.9) 0%,
+    rgba(96, 42, 100, 0.68) 26%,
+    rgba(129, 60, 133, 0.32) 48%,
+    rgba(153, 76, 156, 0.18) 100%
+  );
+}
+.wj-hs__q {
+  position: absolute;
+  z-index: 1;
+  margin: 0;
+  top: 50%;
+  inset-inline-start: clamp(1.5rem, 5vw, 5.5rem);
+  width: min(29rem, 34%);
+  color: #fff;
+  text-align: start;
+  opacity: 0;
+  transform: translateY(calc(-50% + 14px));
+  transition:
+    opacity var(--wj-d4) var(--wj-ease) 0.3s,
+    transform var(--wj-d4) var(--wj-ease) 0.3s;
+}
+.wj-hs__img[data-side="left"] .wj-hs__q {
+  inset-inline-start: auto;
+  inset-inline-end: clamp(1.5rem, 5vw, 5.5rem);
+}
+.wj-hs__s.is-on .wj-hs__q {
+  opacity: 1;
+  transform: translateY(-50%);
+}
+.wj-hs__q p {
+  margin: 0;
+  font-size: clamp(1.1rem, 0.62rem + 1.05vw, 1.72rem);
+  line-height: 1.95;
+  font-weight: 700;
+  text-shadow: 0 1px 14px rgba(0, 0, 0, 0.28);
+}
+.wj-hs__q footer {
+  margin-top: 1.3rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+.wj-hs__q footer::before {
+  content: "";
+  flex: 0 0 auto;
+  width: 2.4rem;
+  height: 2px;
+  background: #ffcc05;
+}
+.wj-hs__q cite {
+  font-style: normal;
+  font-weight: 600;
+  line-height: 1.7;
+  color: #ffe088;
+  font-size: clamp(0.85rem, 0.74rem + 0.3vw, 1.02rem);
+}
+
+/* نقاط الشرائح: عمود طولي صغير على اليمين — نقطة لكل شريحة، والحالية أطول */
+.wj-hs__ctl {
+  position: absolute;
+  z-index: 20;
+  top: 50%;
+  transform: translateY(-50%);
+  inset-inline-start: clamp(0.75rem, 2vw, 1.75rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+}
+.wj-hs__dot {
+  all: unset;
+  box-sizing: border-box;
+  cursor: pointer;
+  padding: 0.4rem;
+  border-radius: 999px;
+}
+.wj-hs__dot::before {
+  content: "";
+  display: block;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow:
+    0 0 0 1px rgba(107, 58, 110, 0.35),
+    0 1px 4px rgba(0, 0, 0, 0.18);
+  transition:
+    height var(--wj-d2) var(--wj-ease),
+    background-color var(--wj-d2) var(--wj-ease);
+}
+.wj-hs__dot:hover::before {
+  background: #fff;
+}
+.wj-hs__dot[aria-current="true"]::before {
+  height: 1.35rem;
+  background: #994c9c;
+  box-shadow:
+    0 0 0 2px rgba(255, 255, 255, 0.9),
+    0 1px 4px rgba(0, 0, 0, 0.18);
+}
+.wj-hs__dot:focus-visible {
+  outline: 2px solid #994c9c;
+  outline-offset: 1px;
+}
+
+@media (max-width: 767px) {
+  .wj-hs__img img {
+    object-position: 46% 18%;
+  }
+  .wj-hs__img::after,
+  .wj-hs__img[data-side="left"]::after {
+    background: linear-gradient(
+      to top,
+      rgba(74, 30, 78, 0.93) 0%,
+      rgba(96, 42, 100, 0.76) 36%,
+      rgba(153, 76, 156, 0.22) 100%
+    );
+  }
+  .wj-hs__q,
+  .wj-hs__img[data-side="left"] .wj-hs__q {
+    top: auto;
+    bottom: 4.9rem;
+    inset-inline: 1.25rem;
+    width: auto;
+    transform: translateY(14px);
+  }
+  .wj-hs__s.is-on .wj-hs__q {
+    transform: none;
+  }
+  .wj-hs__q p {
+    font-size: 1.04rem;
+    line-height: 1.9;
+  }
+  .wj-hs__q footer {
+    margin-top: 0.9rem;
+  }
+  .wj-hs__ctl {
+    top: 0.9rem;
+    transform: none;
+    inset-inline-start: 0.55rem;
+  } /* أعلى اليمين: بعيدًا عن العنوان ونص الصورة */
+}
+@media (prefers-reduced-motion: reduce) {
+  .wj-hs__s,
+  .wj-hs__q,
+  .wj-hero .wj-hero-stage,
+  .wj-hero .wj-hero-grad,
+  .wj-hero .wj-kenburns {
+    transition: none;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════
+   «مقالات وهج» — محافظ السلاسل (products.html#articles)
+   ══════════════════════════════════════════════════════════ */
+.wj-pf-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1rem;
+}
+@media (min-width: 640px) {
+  .wj-pf-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (min-width: 1024px) {
+  .wj-pf-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.5rem;
+  }
+}
+.wj-pf {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid #ece6ea;
+  border-radius: 1.25rem;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  box-shadow:
+    0 1px 2px rgba(29, 26, 29, 0.04),
+    0 12px 30px -20px rgba(29, 26, 29, 0.25);
+  transition:
+    transform var(--wj-d2) var(--wj-ease),
+    box-shadow var(--wj-d2) var(--wj-ease);
+}
+.wj-pf:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 2px 4px rgba(29, 26, 29, 0.05),
+    0 22px 40px -22px rgba(153, 76, 156, 0.45);
+}
+.wj-pf:focus-visible {
+  outline: 3px solid #994c9c;
+  outline-offset: 3px;
+}
+/* 16:9 كالمقاس الموصى به في اللوحة (1200×675): بـ16:10 قُصّ طرفا غلاف «ما يبقى» (اسم السلسلة وشعار ديوان) */
+.wj-pf__cover {
+  position: relative;
+  display: block;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: #f2eef3;
+}
+.wj-pf__cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 35%;
+  transition: transform var(--wj-d3) var(--wj-ease);
+}
+.wj-pf:hover .wj-pf__cover img {
+  transform: scale(1.04);
+}
+.wj-pf__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 1.1rem 1.25rem 1.2rem;
+  flex: 1 1 auto;
+}
+.wj-pf__name {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #1d1a1d;
+  line-height: 1.35;
+}
+.wj-pf__tag {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #994c9c;
+  line-height: 1.6;
+}
+.wj-pf__desc {
+  font-size: 0.88rem;
+  line-height: 1.75;
+  color: #6b5f6b;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.wj-pf__foot {
+  margin-top: auto;
+  padding-top: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid #f1ecf0;
+  font-size: 0.86rem;
+}
+.wj-pf__n {
+  color: #6b5f6b;
+  font-weight: 600;
+}
+.wj-pf__go {
+  color: #994c9c;
+  font-weight: 700;
+}
+.wj-pf-more {
+  margin: 2.75rem 0 1rem;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #1d1a1d;
+  text-align: start;
+}
+.wj-pf-solo {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+@media (min-width: 640px) {
+  .wj-pf-solo {
+    gap: 0.75rem;
+  }
+}
+@media (min-width: 768px) {
+  .wj-pf-solo {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem;
+  }
+}
+.wj-prose p.wj-sp__tag {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #994c9c;
+  margin: 0 0 0.35rem;
+}
+@media (prefers-reduced-motion: reduce) {
+  .wj-pf,
+  .wj-pf__cover img {
+    transition: none;
+  }
+  .wj-pf:hover {
+    transform: none;
+  }
+}
+
+/* سمة hidden يجب أن تتغلّب على أي كلاس عرض (Tailwind: lg:inline-block / block …) */
+[hidden] {
+  display: none !important;
+}
+
+/* ══════════════════════════════════════════════════════════
+   الشهادات والاعتمادات الرسمية — بطاقة واضحة بحالتين
+   ══════════════════════════════════════════════════════════ */
+.wj-cert {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: #fff;
+  border: 1px solid #ece6ea;
+  border-radius: 16px;
+  padding: 18px 16px;
+  text-align: center;
+  align-items: center;
+  transition:
+    box-shadow 0.25s ease,
+    transform 0.25s ease,
+    border-color 0.25s ease;
+}
+a.wj-cert:hover {
+  box-shadow: 0 12px 28px rgba(29, 26, 29, 0.1);
+  transform: translateY(-2px);
+  border-color: #ddc9de;
+}
+.wj-cert.is-soon {
+  background: #faf8fa;
+  border-style: dashed;
+}
+.wj-cert__ic {
+  width: 52px;
+  height: 52px;
+  border-radius: 15px;
+  display: grid;
+  place-items: center;
+  background: rgba(153, 76, 156, 0.1);
+  margin-bottom: 2px;
+}
+.wj-cert__ic .material-symbols-outlined {
+  font-size: 27px;
+  color: #994c9c;
+}
+.wj-cert.is-soon .wj-cert__ic {
+  background: #f1edf1;
+}
+.wj-cert.is-soon .wj-cert__ic .material-symbols-outlined {
+  color: #a597a5;
+}
+.wj-cert__t {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1d1a1d;
+  line-height: 1.4;
+}
+.wj-cert__n {
+  font-size: 12.5px;
+  color: #7b707b;
+  line-height: 1.5;
+}
+.wj-cert__cta {
+  margin-top: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #994c9c;
+}
+.wj-cert__soon {
+  margin-top: 4px;
+  font-size: 11.5px;
+  font-weight: 700;
+  background: #fdf5dc;
+  color: #8a6d00;
+  border: 1px solid #f2dd9a;
+  padding: 3px 12px;
+  border-radius: 999px;
+}
+
+/* بطاقة السلسلة داخل شبكة المقالات */
+.wj-chs__own {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #b07fb2;
+}
+.wj-chs__count {
+  font-size: 12.5px;
+  color: #7b707b;
+  font-weight: 600;
+}
+.wj-chs {
+  border-color: #e3cde4;
+}
+.wj-chs:hover {
+  border-color: #c9a0cb;
+}
+
+/* سطر توضيح «قريبًا» في قسم المكتبة (يظهر ما دامت مطفأة) */
+.wj-lib-note {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #fdf5dc;
+  color: #8a6d00;
+  border: 1px solid #f2dd9a;
+  padding: 11px 18px;
+  border-radius: 14px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+.wj-lib-note .material-symbols-outlined {
+  color: #b08900;
+}
+
+/* ═══════════ فقاعات الهوية: رموز الشعار تطفو في الخلفية ═══════════
+   نسخ صغيرة جدًا من رمز الشعار (قناع SVG بلون الهوية) + هالات دائرية، تصعد ببطء.
+   توضع داخل كل قسم بـz سالب مع isolation، لأن خلفيات الأقسام معتمة وتغطي أي طبقة
+   خلف الصفحة كلها. خلف النص دائمًا. تُلغى مع تقليل الحركة. */
+.wj-amb-host {
+  isolation: isolate;
+}
+.wj-amb {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+.wj-amb i {
+  position: absolute;
+  inset-block-end: -18%;
+  inset-inline-start: var(--x, 10%);
+  width: var(--s, 46px);
+  height: calc(var(--s, 46px) * 1.18);
+  background: var(--c, rgba(153, 76, 156, 0.17));
+  -webkit-mask: url("../svg/wahaj-mark.svg") center/contain no-repeat;
+  mask: url("../svg/wahaj-mark.svg") center/contain no-repeat;
+  animation: wj-amb-rise var(--d, 38s) linear var(--y, 0s) infinite;
+  will-change: transform;
+}
+/* هالة دائرية ناعمة: عمق خلف رموز الشعار */
+.wj-amb i.halo {
+  -webkit-mask: none;
+  mask: none;
+  border-radius: 50%;
+  height: var(--s, 120px);
+  background: radial-gradient(
+    circle at 34% 30%,
+    rgba(153, 76, 156, 0.22),
+    rgba(153, 76, 156, 0.07) 58%,
+    rgba(153, 76, 156, 0) 72%
+  );
+}
+.wj-amb i.ring {
+  -webkit-mask: none;
+  mask: none;
+  border-radius: 50%;
+  height: var(--s, 100px);
+  background: none;
+  border: 1px solid rgba(153, 76, 156, 0.3);
+}
+@keyframes wj-amb-rise {
+  from {
+    transform: translate3d(0, 0, 0) rotate(var(--r0, -6deg)) scale(0.9);
+  }
+  to {
+    transform: translate3d(var(--dx, 26px), -125vh, 0) rotate(var(--r1, 8deg)) scale(1.08);
+  }
+}
+
+/* فوق واجهة الرئيسية: رموز فاتحة تُرى على الفيديو والصورة، تحت النص والزر */
+.wj-hero .wj-amb--hero {
+  z-index: 8;
+}
+.wj-hero .wj-amb--hero i {
+  background: var(--c, rgba(255, 255, 255, 0.3));
+}
+.wj-hero .wj-amb--hero i.halo {
+  background: radial-gradient(
+    circle at 34% 30%,
+    rgba(255, 255, 255, 0.26),
+    rgba(255, 255, 255, 0.09) 58%,
+    rgba(255, 255, 255, 0) 72%
+  );
+}
+.wj-hero .wj-amb--hero i.ring {
+  border-color: rgba(255, 255, 255, 0.34);
+  background: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wj-amb {
+    display: none;
+  }
+}

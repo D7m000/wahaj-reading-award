@@ -1,0 +1,21 @@
+# Local verification images, original-source snapshots, and browser reports
+/verification/
+/node_modules/
+/playwright-report/
+/test-results/
+
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+/.codex/
+/.agents/
+/.aws/
+
+# Editor and OS files
+/.idea/
+/.vscode/
+Thumbs.db
+.DS_Store
+*.log
+*.tmp
