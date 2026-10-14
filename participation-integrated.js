@@ -18,7 +18,7 @@
   }
 
   function clearErrors() {
-    document.querySelectorAll(".field-error").forEach((e) => e.remove());
+    form.querySelectorAll(".field-error").forEach((e) => e.remove());
     form.querySelectorAll("[aria-invalid]").forEach((e) => e.removeAttribute("aria-invalid"));
     $("#error-banner").hidden = true;
   }
@@ -105,7 +105,7 @@
     $("#criteria-fields").innerHTML = selected.criteria
       .map(
         ([name, weight, q], i) =>
-          `<details class="criterion-box" ${i === 0 ? "open" : ""}><summary><span>${i + 1} ${name}</span><span><span class="weight">${weight}%</span><span class="criterion-chevron">⌄</span></span></summary><div class="criterion-inner"><p class="criterion-question">${q}</p><label>توضيح المعيار <span>*</span><textarea name="criterion_${i}" required minlength="15" maxlength="2000" rows="3" placeholder="وضّح هذا الجانب من مشاركتك"></textarea></label><div class="links-label evidence-label">الشواهد <span>*</span></div><p class="evidence-help">أضف رابطًا أو ملف PDF أو صورة يلزم شاهد واحد على الأقل لهذا المعيار</p><div data-links="${i}"></div><div class="evidence-actions"><button type="button" class="add-link" data-add-link="${i}">+ إضافة رابط</button><button type="button" class="add-link" data-pick-pdf="${i}">إضافة ملف PDF</button><button type="button" class="add-link" data-pick-image="${i}">إضافة صورة</button></div><input type="file" data-file-kind="pdf" data-file-index="${i}" accept="application/pdfpdf" multiple hidden aria-label="إضافة ملفات PDF لمعيار ${name}"><input type="file" data-file-kind="image" data-file-index="${i}" accept="image/jpegimage/pngimage/webpjpgjpegpngwebp" multiple hidden aria-label="إضافة صور لمعيار ${name}"><div class="evidence-file-list" data-files="${i}"></div><div class="attachment-status" data-file-status="${i}" aria-live="polite"></div><small class="evidence-limit">PDF أو JPG أو PNG أو WebP · حتى 5 ملفات لكل معيار · 10 ميجابايت للملف</small></div></details>`,
+          `<details class="criterion-box" ${i === 0 ? "open" : ""}><summary><span>${i + 1} ${name}</span><span><span class="weight">${weight}%</span><span class="criterion-chevron">⌄</span></span></summary><div class="criterion-inner"><p class="criterion-question">${q}</p><label>توضيح المعيار <span>*</span><textarea name="criterion_${i}" required minlength="15" maxlength="2000" rows="3" placeholder="وضّح هذا الجانب من مشاركتك"></textarea></label><div class="links-label evidence-label">الشواهد <span>*</span></div><p class="evidence-help">أضف رابطًا أو ملف PDF أو صورة يلزم شاهد واحد على الأقل لهذا المعيار</p><div data-links="${i}"></div><div class="evidence-actions"><button type="button" class="add-link" data-add-link="${i}">+ إضافة رابط</button><button type="button" class="add-link" data-pick-pdf="${i}">إضافة ملف PDF</button><button type="button" class="add-link" data-pick-image="${i}">إضافة صورة</button></div><input type="file" data-file-kind="pdf" data-file-index="${i}" accept="application/pdf,.pdf" multiple hidden aria-label="إضافة ملفات PDF لمعيار ${name}"><input type="file" data-file-kind="image" data-file-index="${i}" accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp" multiple hidden aria-label="إضافة صور لمعيار ${name}"><div class="evidence-file-list" data-files="${i}"></div><div class="attachment-status" data-file-status="${i}" aria-live="polite"></div><small class="evidence-limit">PDF أو JPG أو PNG أو WebP · حتى 5 ملفات لكل معيار · 10 ميجابايت للملف</small></div></details>`,
       )
       .join("");
     const saved = evidenceByTrack[id];
@@ -137,7 +137,7 @@
       return false;
     }
     let first = null;
-    const section = document.querySelector(`[data-step="${current}"]`);
+    const section = form.querySelector(`[data-step="${current}"]`);
     for (const input of section.querySelectorAll("input,select,textarea")) {
       if (input.disabled || input.type === "radio" || input.type === "file") continue;
       const value = input.value.trim();
@@ -215,7 +215,7 @@
   function showStep(number) {
     current = number;
     clearErrors();
-    document
+    form
       .querySelectorAll("[data-step]")
       .forEach((s) => (s.hidden = Number(s.dataset.step) !== current));
     $("#step-label").textContent = `الخطوة ${current + 1} من 4`;
@@ -232,7 +232,7 @@
     $("#next").innerHTML = current === 3 ? "إرسال تجريبي <span>←</span>" : "التالي <span>←</span>";
     if (current === 3) renderReview();
     syncSubmit();
-    document.querySelector(`[data-step="${current}"] h2`).focus({ preventScroll: true });
+    form.querySelector(`[data-step="${current}"] h2`).focus({ preventScroll: true });
     scrollPane();
   }
 
@@ -327,7 +327,7 @@
     });
   }
 
-  document
+  form
     .querySelectorAll('[name="domain"]')
     .forEach((i) => i.addEventListener("change", () => renderTracks(i.value)));
   $("#track-options").addEventListener("change", (e) => {
@@ -481,12 +481,12 @@
       const t = TRACKS.find((t) => t.id === id);
       if (!t) return;
       if (current !== 0) return;
-      const radio = document.querySelector(`[name="domain"][value="${t.domain}"]`);
+      const radio = form.querySelector(`[name="domain"][value="${t.domain}"]`);
       if (radio && !radio.checked) {
         radio.checked = true;
         renderTracks(t.domain);
       }
-      const target = document.querySelector(`[name="track"][value="${id}"]`);
+      const target = form.querySelector(`[name="track"][value="${id}"]`);
       if (target) {
         target.checked = true;
         selectTrack(id);
