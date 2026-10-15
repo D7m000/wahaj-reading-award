@@ -712,7 +712,7 @@
               >ابدأ المشاركة <span class="material-symbols-outlined">arrow_back</span></a
             ><a
               class="award-button award-outline"
-              href="assets/award-profile.pptx"
+              href="assets/award-profile.pdf"
               download
               >الملف التعريفي <span class="material-symbols-outlined">download</span></a
             >
@@ -748,7 +748,7 @@
               </p>
               <a
                 class="award-text-link"
-                href="assets/award-profile.pptx"
+                href="assets/award-profile.pdf"
                 download
                 >الملف التعريفي للجائزة <span class="material-symbols-outlined">download</span></a
               >
@@ -965,7 +965,7 @@
               </div>
               <div class="side-bottom">
                 <a
-                  href="assets/award-profile.pptx"
+                  href="assets/award-profile.pdf"
                   download
                   >الملف التعريفي للجائزة <span>↓</span></a
                 >
@@ -1275,8 +1275,7 @@
                     >
                   </div>
                   <div class="context-note">
-                    زر الإرسال في هذه المعاينة يوضح نهاية الرحلة فقط لا ينشئ طلبًا حقيقيًا أو رقم
-                    ترشّح
+                    راجع بياناتك والشواهد قبل الإرسال ستظهر رسالة نجاح بعد تأكيد حفظ مشاركتك
                   </div>
                 </section>
                 <p
@@ -1285,7 +1284,7 @@
                   aria-live="polite"
                   hidden
                 >
-                  حدد الإقرارين أعلاه لتفعيل زر الإرسال التجريبي
+                  حدد الإقرارين أعلاه لتفعيل زر الإرسال
                 </p>
                 <div class="form-footer">
                   <button
@@ -1309,16 +1308,29 @@
                 id="demo-complete"
                 hidden
               >
-                <div class="completion-icon">✓</div>
-                <span class="eyebrow">نهاية المعاينة</span>
-                <h2 tabindex="-1">اكتملت تجربة المشاركة</h2>
-                <p>وصلت إلى نهاية الخطوات الأربع بنجاح</p>
-                <div class="context-note">
-                  <b>لم يُرسل طلب إلى الجمعية</b><br />هذه تجربة للواجهة فقط؛ الإرسال والحفظ
-                  الحقيقيان يحتاجان ربطًا بالخادم
+                <div class="completion-icon">!</div>
+                <span
+                  class="eyebrow"
+                  id="completion-label"
+                  >المشاركة غير مرسلة</span
+                >
+                <h2
+                  id="completion-title"
+                  tabindex="-1"
+                >
+                  تعذر إرسال مشاركتك
+                </h2>
+                <p id="completion-message">خدمة إرسال المشاركات غير متاحة حاليًا</p>
+                <div
+                  class="context-note"
+                  id="completion-note"
+                  aria-live="polite"
+                >
+                  لم يتم إرسال مشاركتك أو حفظها لدى الجمعية يمكنك الرجوع لمراجعتها والمحاولة لاحقًا
+                  قبل إغلاق الصفحة
                 </div>
                 <div class="complete-summary">
-                  <small>المسار الذي جرّبته</small><b id="complete-track"></b>
+                  <small>مسار المشاركة</small><b id="complete-track"></b>
                 </div>
                 <div class="completion-actions">
                   <button
@@ -1332,7 +1344,7 @@
                     class="button-secondary"
                     id="restart"
                   >
-                    ابدأ تجربة جديدة
+                    بدء مشاركة جديدة
                   </button>
                 </div>
               </section>
@@ -1351,7 +1363,7 @@
             <p>تفاصيل المشاركة الكاملة في الملف التعريفي للجائزة</p>
             <a
               class="award-text-link"
-              href="assets/award-profile.pptx"
+              href="assets/award-profile.pdf"
               download
               >تحميل الملف التعريفي <span class="material-symbols-outlined">download</span></a
             >

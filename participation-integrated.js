@@ -5,6 +5,8 @@
     form = $("#participation-form");
   let current = 0,
     selected = null;
+  let submitHandler = null,
+    submitting = false;
   const evidenceByTrack = {},
     fileEvidence = {};
 
@@ -229,7 +231,8 @@
       e.querySelector(".step-number").textContent = i < current ? "✓" : i + 1;
     });
     $("#previous").hidden = current === 0;
-    $("#next").innerHTML = current === 3 ? "إرسال تجريبي <span>←</span>" : "التالي <span>←</span>";
+    $("#next").innerHTML =
+      current === 3 ? "إرسال المشاركة <span>←</span>" : "التالي <span>←</span>";
     if (current === 3) renderReview();
     syncSubmit();
     form.querySelector(`[data-step="${current}"] h2`).focus({ preventScroll: true });
@@ -341,15 +344,72 @@
       document.querySelector(`[data-links="${i}"] .link-row:last-child input`)?.focus();
     }
   });
-  $("#next").addEventListener("click", () => {
-    if ($("#next").disabled || !validStep()) return;
-    if (current < 3) showStep(current + 1);
-    else {
-      form.hidden = true;
-      $("#demo-complete").hidden = false;
-      $("#complete-track").textContent = selected.title;
-      $("#demo-complete h2").focus({ preventScroll: true });
+  function submissionData() {
+    snapshotCriteria();
+    const formData = new FormData(form);
+    selected.criteria.forEach((_, index) => {
+      const evidence = evidenceByTrack[selected.id][index];
+      formData.delete(`evidence_${index}`);
+      evidence.links.forEach((link) => {
+        if (link.trim()) formData.append(`evidence_${index}[]`, link.trim());
+      });
+      evidence.files.forEach((file) => formData.append(`files_${index}[]`, file, file.name));
+    });
+    return { formData, domain: selected.domain, trackId: selected.id };
+  }
+
+  function showCompletion(sent) {
+    $("#completion-label").textContent = sent ? "تم الإرسال" : "المشاركة غير مرسلة";
+    $("#completion-title").textContent = sent ? "تم إرسال مشاركتك بنجاح" : "تعذر إرسال مشاركتك";
+    $("#completion-message").textContent = sent
+      ? "شكرًا لمشاركتك في جائزة وهج القرائية"
+      : "خدمة إرسال المشاركات غير متاحة حاليًا";
+    $("#completion-note").textContent = sent
+      ? "ستتم مراجعة مشاركتك والتواصل معك عند الحاجة إلى معلومات إضافية"
+      : "لم يتم إرسال مشاركتك أو حفظها لدى الجمعية يمكنك الرجوع لمراجعتها والمحاولة لاحقًا قبل إغلاق الصفحة";
+    $("#demo-complete .completion-icon").textContent = sent ? "✓" : "!";
+    $("#edit-review").hidden = sent;
+    form.hidden = true;
+    $("#demo-complete").hidden = false;
+    $("#complete-track").textContent = selected.title;
+    $("#completion-title").focus({ preventScroll: true });
+    scrollPane();
+  }
+
+  $("#next").addEventListener("click", async () => {
+    if (submitting || $("#next").disabled || !validStep()) return;
+    if (current < 3) {
+      showStep(current + 1);
+      return;
+    }
+    if (!submitHandler) {
+      showCompletion(false);
+      return;
+    }
+    submitting = true;
+    try {
+      const data = submissionData();
+      form.inert = true;
+      form.setAttribute("aria-busy", "true");
+      syncSubmit();
+      $("#next").textContent = "جار إرسال المشاركة";
+      const result = await submitHandler(data);
+      if (result?.success !== true) throw new Error("Submission was not confirmed");
+      showCompletion(true);
+    } catch {
+      $("#error-banner").textContent =
+        "تعذر تأكيد إرسال مشاركتك بياناتك ما زالت موجودة في هذه الصفحة راجع اتصالك وحاول مرة أخرى";
+      $("#error-banner").hidden = false;
+      $("#error-banner").setAttribute("tabindex", "-1");
+      form.inert = false;
+      $("#error-banner").focus({ preventScroll: true });
       scrollPane();
+    } finally {
+      submitting = false;
+      form.inert = false;
+      form.removeAttribute("aria-busy");
+      $("#next").innerHTML = "إرسال المشاركة <span>←</span>";
+      syncSubmit();
     }
   });
   $("#previous").onclick = () => showStep(current - 1);
@@ -384,10 +444,15 @@
   setEnabled($("#idea-fields"), false);
 
   function syncSubmit() {
-    const disabled = current === 3 && !(field("accuracy").checked && field("rights").checked);
+    const disabled =
+      submitting || (current === 3 && !(field("accuracy").checked && field("rights").checked));
     $("#next").disabled = disabled;
     $("#next").setAttribute("aria-disabled", String(disabled));
-    $("#next").title = disabled ? "حدد الإقرارين لتفعيل الإرسال التجريبي" : "";
+    $("#next").title = submitting
+      ? "جار إرسال المشاركة"
+      : disabled
+        ? "حدد الإقرارين لتفعيل الإرسال"
+        : "";
     const hint = $("#acknowledgement-hint");
     if (hint) hint.hidden = current !== 3 || !disabled;
   }
@@ -477,6 +542,15 @@
   });
 
   window.WahajParticipation = {
+    // Register the PHP adapter after this script loads. Return { success: true }
+    // only after the server confirms saving. formData includes evidence_N[] and files_N[].
+    setSubmitHandler(handler) {
+      if (handler !== null && typeof handler !== "function") {
+        throw new TypeError("The submission handler must be a function or null");
+      }
+      if (submitting) throw new Error("Cannot change the handler during submission");
+      submitHandler = handler;
+    },
     selectTrack(id) {
       const t = TRACKS.find((t) => t.id === id);
       if (!t) return;
